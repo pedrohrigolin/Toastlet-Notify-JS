@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Toastlet Notify - Modern Toast Notifications</title>
+    <script src="https://cdn.jsdelivr.net/gh/pedrohrigolin/Toastlet-Notify-JS@main/toastletNotify.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 0;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .badges {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-bottom: 40px;
+        }
+
+        .badge {
+            background: rgba(255,255,255,0.2);
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255,255,255,0.3);
+        }
+
+        .main-content {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: -40px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section {
+            padding: 40px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        .section h2 {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .section p {
+            margin-bottom: 30px;
+            color: #666;
+        }
+
+        .demo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+
+        .demo-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 25px;
+            border: 1px solid #dee2e6;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .demo-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .demo-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            color: #495057;
+        }
+
+        .demo-card p {
+            margin-bottom: 20px;
+            color: #6c757d;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            display: inline-block;
+            text-decoration: none;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #00bc8c 0%, #00a085 100%);
+        }
+
+        .btn-error {
+            background: linear-gradient(135deg, #E74C3C 0%, #c0392b 100%);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3498DB 0%, #2980b9 100%);
+        }
+
+        .btn-warning {
+            background: linear-gradient(135deg, #F39C12 0%, #e67e22 100%);
+        }
+
+        .btn-notice {
+            background: linear-gradient(135deg, #F39C12 0%, #e67e22 100%);
+        }
+
+        .code-block {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Fira Code', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+            margin: 20px 0;
+            border-left: 4px solid #667eea;
+        }
+
+        .installation {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .installation h3 {
+            color: #495057;
+            margin-bottom: 15px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+
+        .feature-card h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .custom-demo {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 30px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1rem;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            height: 80px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 0;
+            color: white;
+            background: rgba(0,0,0,0.2);
+            margin-top: 60px;
+        }
+
+        .footer a {
+            color: white;
+            text-decoration: none;
+            margin: 0 10px;
+            opacity: 0.8;
+            transition: opacity 0.3s ease;
+        }
+
+        .footer a:hover {
+            opacity: 1;
+        }
+
+        /* Custom toast themes for demo */
+        .toastlet.dark-theme {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+            color: #ecf0f1 !important;
+            border-left: 4px solid #3498db !important;
+        }
+
+        .toastlet.rainbow-theme {
+            background: linear-gradient(135deg, #ff6b6b 0%, #4ecdc4 50%, #45b7d1 100%) !important;
+            color: white !important;
+            border-radius: 15px !important;
+        }
+
+        .toastlet.minimal-theme {
+            background: #f8f9fa !important;
+            color: #495057 !important;
+            border: 2px solid #dee2e6 !important;
+            border-radius: 0 !important;
+            box-shadow: none !important;
+        }
+
+        .toastlet.neon-theme {
+            background: #0f0f0f !important;
+            color: #00ff00 !important;
+            border: 2px solid #00ff00 !important;
+            box-shadow: 0 0 20px rgba(0, 255, 0, 0.5) !important;
+        }
+
+        .toastlet.elegant-theme {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+            color: white !important;
+            border-left: 6px solid #ffd700 !important;
+            border-radius: 8px !important;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .section {
+                padding: 30px 20px;
+            }
+            
+            .demo-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>🍞 Toastlet Notify</h1>
+            <p>Modern and responsive floating notification JavaScript library</p>
+            <div class="badges">
+                <span class="badge">Zero Dependencies</span>
+                <span class="badge">~8KB Minified</span>
+                <span class="badge">Mobile Ready</span>
+                <span class="badge">ES5+ Compatible</span>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <section class="section">
+                <h2>🚀 Installation</h2>
+                <p>Get started with Toastlet Notify in seconds. Just include the CDN link and you're ready to go!</p>
+                
+                <div class="installation">
+                    <h3>📦 Via CDN (Recommended)</h3>
+                    <div class="code-block">
+&lt;script src="https://cdn.jsdelivr.net/gh/pedrohrigolin/Toastlet-Notify-JS@main/toastletNotify.min.js"&gt;&lt;/script&gt;</div>
+                </div>
+
+                <div class="installation">
+                    <h3>⚡ Basic Usage</h3>
+                    <div class="code-block">
+// Simple notification
+toastletNotify.notify('success', 'Operation completed successfully!');
+
+// With options
+toastletNotify.notify('warning', 'Please check your input', {
+    duration: 10000,
+    sticky: true
+});</div>
+                </div>
+
+                <div class="installation">
+                    <h3>🎨 Custom CSS Example</h3>
+                    <div class="code-block">
+/* Dark theme example */
+.toastlet.dark-theme {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+    color: #ecf0f1 !important;
+    border-left: 4px solid #3498db !important;
+}
+
+/* Usage */
+toastletNotify.notify('success', 'Custom styled notification!', {
+    class: 'dark-theme'
+});</div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🎯 Live Demo</h2>
+                <p>Try all notification types and see how they work in real-time.</p>
+                
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <h3>✅ Success</h3>
+                        <p>Perfect for confirmations and successful operations</p>
+                        <button class="btn btn-success" onclick="showSuccess()">Show Success</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>❌ Error</h3>
+                        <p>Ideal for error messages and failed operations</p>
+                        <button class="btn btn-error" onclick="showError()">Show Error</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>ℹ️ Info</h3>
+                        <p>Great for general information and tips</p>
+                        <button class="btn btn-info" onclick="showInfo()">Show Info</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>⚠️ Warning</h3>
+                        <p>Use for warnings and preventive alerts</p>
+                        <button class="btn btn-warning" onclick="showWarning()">Show Warning</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>🔔 Notice</h3>
+                        <p>Perfect for general notifications and reminders</p>
+                        <button class="btn btn-notice" onclick="showNotice()">Show Notice</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>🧲 Sticky</h3>
+                        <p>Notifications that stay until manually closed</p>
+                        <button class="btn" onclick="showSticky()">Show Sticky</button>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🛠️ Custom Demo</h2>
+                <p>Create your own notification with custom settings and see the code generated.</p>
+                
+                <div class="custom-demo">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="customType">Notification Type</label>
+                            <select id="customType">
+                                <option value="success">Success</option>
+                                <option value="error">Error</option>
+                                <option value="info">Info</option>
+                                <option value="warning">Warning</option>
+                                <option value="notice">Notice</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customDuration">Duration (ms)</label>
+                            <input type="number" id="customDuration" value="5000" min="1000" max="30000">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="customMessage">Message</label>
+                        <textarea id="customMessage" placeholder="Enter your notification message here...">This is a custom notification message!</textarea>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="checkbox-group">
+                            <input type="checkbox" id="customSticky">
+                            <label for="customSticky">Make it sticky</label>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customClass">Custom Theme</label>
+                            <select id="customClass">
+                                <option value="">Default Theme</option>
+                                <option value="dark-theme">Dark Theme</option>
+                                <option value="rainbow-theme">Rainbow Theme</option>
+                                <option value="minimal-theme">Minimal Theme</option>
+                                <option value="neon-theme">Neon Theme</option>
+                                <option value="elegant-theme">Elegant Theme</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <button class="btn" onclick="showCustom()">Show Custom Notification</button>
+                    
+                    <div id="generatedCode" class="code-block" style="display: none; margin-top: 20px;"></div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>🎨 Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📱</div>
+                        <h4>Mobile Ready</h4>
+                        <p>Responsive design with swipe gestures and touch-friendly controls</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <h4>Zero Dependencies</h4>
+                        <p>No external libraries required. Just include and use!</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Lightweight</h4>
+                        <p>Only ~8KB minified with optimized performance</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🎨</div>
+                        <h4>Customizable</h4>
+                        <p>Easy to style and customize with CSS classes</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🖱️</div>
+                        <h4>Interactive</h4>
+                        <p>Pause on hover, manual close, and auto-dismiss</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h4>Cross-Browser</h4>
+                        <p>Works on all modern browsers and devices</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="section">
+                <h2>📊 Use Cases</h2>
+                <p>See how Toastlet Notify can be used in real-world scenarios.</p>
+                
+                <div class="demo-grid">
+                    <div class="demo-card">
+                        <h3>📝 Form Validation</h3>
+                        <p>Show validation errors and success messages</p>
+                        <button class="btn btn-error" onclick="showFormError()">Validation Error</button>
+                        <button class="btn btn-success" onclick="showFormSuccess()">Form Submitted</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>💾 Save Operations</h3>
+                        <p>Feedback for save, update, and delete operations</p>
+                        <button class="btn btn-info" onclick="showAutoSave()">Auto Save</button>
+                        <button class="btn btn-success" onclick="showManualSave()">Manual Save</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>🔐 Authentication</h3>
+                        <p>Login, logout, and session management</p>
+                        <button class="btn btn-success" onclick="showLogin()">Login Success</button>
+                        <button class="btn btn-warning" onclick="showSession()">Session Warning</button>
+                    </div>
+                    
+                    <div class="demo-card">
+                        <h3>🔄 API Responses</h3>
+                        <p>Handle API success and error responses</p>
+                        <button class="btn btn-info" onclick="showLoading()">Loading...</button>
+                        <button class="btn btn-error" onclick="showAPIError()">API Error</button>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <footer class="footer">
+            <p>
+                <strong>Toastlet Notify</strong> - Developed by Pedro Rigolin 👨‍💻
+            </p>
+            <p>
+                <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS" target="_blank">📚 GitHub</a>
+                <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS/issues" target="_blank">🐛 Report Bug</a>
+                <a href="https://opensource.org/licenses/MIT" target="_blank">📄 MIT License</a>
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Basic notification demos
+        function showSuccess() {
+            toastletNotify.notify('success', 'Operation completed successfully!');
+        }
+
+        function showError() {
+            toastletNotify.notify('error', 'Error processing request.');
+        }
+
+        function showInfo() {
+            toastletNotify.notify('info', 'Important system information.');
+        }
+
+        function showWarning() {
+            toastletNotify.notify('warning', 'Warning: please verify the entered data.');
+        }
+
+        function showNotice() {
+            toastletNotify.notify('notice', 'New update available.');
+        }
+
+        function showSticky() {
+            toastletNotify.notify('warning', 'This notification stays until manually closed.', {
+                sticky: true
+            });
+        }
+
+        // Custom notification demo
+        function showCustom() {
+            const type = document.getElementById('customType').value;
+            const message = document.getElementById('customMessage').value;
+            const duration = parseInt(document.getElementById('customDuration').value);
+            const sticky = document.getElementById('customSticky').checked;
+            const customClass = document.getElementById('customClass').value;
+
+            const options = {};
+            if (duration !== 5000) options.delay = duration;
+            if (sticky) options.sticky = true;
+            if (customClass) options.customClass = customClass;
+
+            toastletNotify.notify(type, message, options);
+
+            // Generate code
+            const codeElement = document.getElementById('generatedCode');
+            let code = `toastletNotify.notify('${type}', '${message}'`;
+            
+            if (Object.keys(options).length > 0) {
+                code += `, {\n`;
+                if (options.delay) code += `    duration: ${options.delay},\n`;
+                if (options.sticky) code += `    sticky: true,\n`;
+                if (options.customClass) code += `    class: '${options.customClass}',\n`;
+                code = code.slice(0, -2) + '\n}';
+            }
+            
+            code += ');';
+            
+            codeElement.textContent = code;
+            codeElement.style.display = 'block';
+        }
+
+        // Use case demos
+        function showFormError() {
+            toastletNotify.notify('error', 'Please fill in all required fields.');
+        }
+
+        function showFormSuccess() {
+            toastletNotify.notify('success', 'Form submitted successfully!');
+        }
+
+        function showAutoSave() {
+            toastletNotify.notify('info', 'Draft saved automatically.', {
+                delay: 2000
+            });
+        }
+
+        function showManualSave() {
+            toastletNotify.notify('success', 'Document saved successfully!');
+        }
+
+        function showLogin() {
+            toastletNotify.notify('success', 'Login successful! Redirecting...');
+        }
+
+        function showSession() {
+            toastletNotify.notify('warning', 'Your session will expire in 5 minutes.', {
+                sticky: true
+            });
+        }
+
+        function showLoading() {
+            toastletNotify.notify('info', 'Processing your request...', {
+                delay: 3000
+            });
+        }
+
+        function showAPIError() {
+            toastletNotify.notify('error', 'Connection error. Please try again.', {
+                sticky: true
+            });
+        }
+
+        // Show welcome message when page loads
+        window.addEventListener('load', function() {
+            setTimeout(() => {
+                toastletNotify.notify('success', 'Welcome to Toastlet Notify Demo! 🍞', {
+                    delay: 4000
+                });
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

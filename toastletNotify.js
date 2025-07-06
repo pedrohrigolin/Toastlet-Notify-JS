@@ -175,7 +175,7 @@
                 elements.toastStyle.mobile += `background-color: ${elements.notificationType.color};`            
 
                 elements.toast = document.createElement('div');
-                elements.toast.className = `toastlet ${elements.config.customClass}`;
+                elements.toast.className = `toastlet ${elements.config.customClass}`.trim();
                 elements.toast.style.cssText = elements.toastStyle[isMobile ? 'mobile' : 'desktop']
 
                 elements.iconCol = document.createElement('div');

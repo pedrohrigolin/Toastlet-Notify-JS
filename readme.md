@@ -88,8 +88,8 @@ toastletNotify.notify('notice', 'New update available.');
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `sticky` | `boolean` | `false` | Makes notification permanent (no automatic closing) |
-| `duration` | `number` | `5000` | Duration in milliseconds before automatic closing |
-| `class` | `string` | `""` | Additional CSS classes for customization |
+| `delay` | `number` | `5000` | Duration in milliseconds before automatic closing |
+| `customClass` | `string` | `""` | Additional CSS classes for customization |
 
 ### 🧲 Sticky Notification
 
@@ -103,7 +103,7 @@ toastletNotify.notify('warning', 'This notification stays until manually closed.
 
 ```javascript
 toastletNotify.notify('info', 'This notification lasts 10 seconds.', {
-    duration: 10000
+    delay: 10000
 });
 ```
 
@@ -111,7 +111,7 @@ toastletNotify.notify('info', 'This notification lasts 10 seconds.', {
 
 ```javascript
 toastletNotify.notify('success', 'Success with custom style!', {
-    class: 'my-custom-class'
+    customClass: 'my-custom-class'
 });
 ```
 
@@ -160,7 +160,7 @@ toastletNotify.notify('error', 'Please fill in all required fields.');
 
 // Processing information
 toastletNotify.notify('info', 'Processing your request...', {
-    duration: 3000
+    delay: 3000
 });
 ```
 
@@ -169,7 +169,7 @@ toastletNotify.notify('info', 'Processing your request...', {
 ```javascript
 // Auto-save with short duration
 toastletNotify.notify('success', 'Draft saved automatically.', {
-    duration: 2000
+    delay: 2000
 });
 
 // Manual save confirmation
@@ -226,7 +226,7 @@ toastletNotify.notify('warning', 'Your session has expired. Please login again.'
 ```javascript
 // Apply dark theme
 toastletNotify.notify('info', 'Dark theme activated!', {
-    class: 'dark-theme'
+    customClass: 'dark-theme'
 });
 ```
 
