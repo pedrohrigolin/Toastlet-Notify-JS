@@ -1,28 +1,47 @@
 /**
  * 🍞 Toastlet Notify
- * Biblioteca JavaScript para exibição de notificações flutuantes (toasts) na tela.
- * Inspirado visualmente no estilo do PNotify 4+ com Bootstrap.
- *
+ * A lightweight JavaScript library for displaying beautiful toast notifications.
+ * Visually inspired by PNotify 4+ with Bootstrap styling.
+ * 
  * 📦 @version 1.0.0
  * 👤 @author Pedro Rigolin
- *
- * ⚙️ Uso básico:
- * toastletNotify.notify(type, message);
- *
- * 🎨 Tipos suportados:
- * - ℹ️ info
- * - ✅ success
- * - ⚠️ warning
- * - ❌ error
- *
- * 🧩 @namespace toastletNotify
+ * 
+ * ⚙️ Basic Usage:
+ * toastletNotify.notify('success', 'Operation completed successfully');
+ * 
+ * 🎨 Supported Types:
+ * - ℹ️ info - For general information messages
+ * - ✅ success - For successful operations
+ * - ⚠️ warning - For warning messages
+ * - ❌ error - For error notifications
+ * - 📝 notice - Alternative styling for notifications
+ * 
+ * 🧩 Advanced Usage:
+ * toastletNotify.notify('success', 'Data saved!', {
+ *   sticky: true,
+ *   customClass: 'my-custom-toast',
+ *   delay: 5000
+ * });
+ * 
+ * 🧠 Mobile Responsive:
+ * Automatically adapts to mobile devices with appropriate styling
+ * 
+ * 🌐 @namespace toastletNotify
  * 🛎️ @method notify
- * @param {string} type - O tipo da notificação. Pode ser: "info", "success", "warning" ou "error".
- * @param {string} message - A mensagem a ser exibida.
- * @param {Object} [options] - Configurações opcionais.
- * @param {boolean} [options.sticky=false] - Se true, a notificação não fecha automaticamente.
- * @param {number} [options.duration=3000] - Duração da notificação em milissegundos (ignorado se sticky for true).
- * @param {string} [options.class] - Classes CSS adicionais para estilizar a notificação.
+ * @param {string} type - Notification type: "info", "success", "warning", "error", or "notice"
+ * @param {string} message - Text message to display (supports line breaks with \n)
+ * @param {Object} [options] - Optional configuration settings
+ * @param {boolean} [options.sticky=false] - If true, notification won't auto-close
+ * @param {number} [options.delay=5000] - Duration in milliseconds before auto-closing (ignored if sticky is true)
+ * @param {string} [options.customClass] - Additional CSS classes for custom styling
+ * 
+ * 📱 Touch Support:
+ * Swipe to dismiss on mobile devices
+ * 
+ * 🖱️ Interaction:
+ * - Hover to reveal controls
+ * - Pause/resume timer button
+ * - Close button to dismiss
  */
 (function(){
 
