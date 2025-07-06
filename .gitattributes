@@ -1,0 +1,20 @@
+# Ignore HTML and CSS files for GitHub language statistics
+# This ensures the repository shows as a JavaScript project
+
+# Ignore HTML files (demo pages)
+*.html linguist-detectable=false
+
+# Ignore CSS files (styling for demos)
+*.css linguist-detectable=false
+
+# Ensure JavaScript files are detected
+*.js linguist-detectable=true
+
+# Optional: Mark specific files as documentation
+README.md linguist-documentation=true
+docs/** linguist-documentation=true
+
+# Optional: Mark demo files as vendored (excluded from stats)
+index.html linguist-vendored=true
+demo/** linguist-vendored=true
+examples/** linguist-vendored=true
