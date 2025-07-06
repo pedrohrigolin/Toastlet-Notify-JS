@@ -313,7 +313,7 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 ## 🔗 Useful Links
 
 - 📚 [GitHub Repository](https://github.com/pedrohrigolin/Toastlet-Notify-JS)
-- 🎯 [Online Demo](https://pedrohrigolin.github.io/Toastlet-Notify-JS/)
+- 🎯 [Online Demo](https://pedrohrigolin.github.io/Toastlet-Notify-JS/demo.html)
 - 🐛 [Report Bugs](https://github.com/pedrohrigolin/Toastlet-Notify-JS/issues)
 
 ---

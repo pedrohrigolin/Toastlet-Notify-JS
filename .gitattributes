@@ -15,6 +15,7 @@ README.md linguist-documentation=true
 docs/** linguist-documentation=true
 
 # Optional: Mark demo files as vendored (excluded from stats)
+demo.html linguist-vendored=true
 index.html linguist-vendored=true
 demo/** linguist-vendored=true
 examples/** linguist-vendored=true
