@@ -49,6 +49,7 @@ toastletNotify.notify('success', 'Operation completed successfully!');
 toastletNotify.notify('success', 'Data saved successfully!');
 ```
 - **Color:** Green (`#00bc8c`)
+- **CSS Class:** `toastletSuccess`
 - **Usage:** Confirmations, successful operations
 
 ### ❌ Error
@@ -56,6 +57,7 @@ toastletNotify.notify('success', 'Data saved successfully!');
 toastletNotify.notify('error', 'Error processing request.');
 ```
 - **Color:** Red (`#E74C3C`)
+- **CSS Class:** `toastletError`
 - **Usage:** Errors, operation failures
 
 ### ℹ️ Info
@@ -63,6 +65,7 @@ toastletNotify.notify('error', 'Error processing request.');
 toastletNotify.notify('info', 'Important system information.');
 ```
 - **Color:** Blue (`#3498DB`)
+- **CSS Class:** `toastletInfo`
 - **Usage:** General information, tips
 
 ### ⚠️ Warning
@@ -70,6 +73,7 @@ toastletNotify.notify('info', 'Important system information.');
 toastletNotify.notify('warning', 'Warning: please verify the entered data.');
 ```
 - **Color:** Orange (`#F39C12`)
+- **CSS Class:** `toastletWarning`
 - **Usage:** Warnings, preventive alerts
 
 ### 🔔 Notice
@@ -77,6 +81,7 @@ toastletNotify.notify('warning', 'Warning: please verify the entered data.');
 toastletNotify.notify('notice', 'New update available.');
 ```
 - **Color:** Orange (`#F39C12`) - Alias for `warning`
+- **CSS Class:** `toastletNotice`
 - **Usage:** General notifications, reminders
 
 ---
@@ -90,6 +95,8 @@ toastletNotify.notify('notice', 'New update available.');
 | `sticky` | `boolean` | `false` | Makes notification permanent (no automatic closing) |
 | `delay` | `number` | `5000` | Duration in milliseconds before automatic closing |
 | `customClass` | `string` | `""` | Additional CSS classes for customization |
+| `transition` | `boolean` | `true` | Enable/disable transition animations |
+| `transitionDuration` | `number` | `300` | Duration of animations in milliseconds |
 
 ### 🧲 Sticky Notification
 
@@ -113,6 +120,75 @@ toastletNotify.notify('info', 'This notification lasts 10 seconds.', {
 toastletNotify.notify('success', 'Success with custom style!', {
     customClass: 'my-custom-class'
 });
+```
+
+### 🎞️ Animation Control
+
+```javascript
+// Disable all animations
+toastletNotify.notify('info', 'No animations applied.', {
+    transition: false
+});
+
+// Custom animation duration
+toastletNotify.notify('success', 'Slow animation applied!', {
+    transition: true,
+    transitionDuration: 800
+});
+
+// Instant animations (no transition effect)
+toastletNotify.notify('warning', 'Instant display!', {
+    transition: true,
+    transitionDuration: 0
+});
+```
+
+---
+
+## 🎯 CSS Classes Structure
+
+Each notification automatically includes several CSS classes for targeted styling:
+
+### 🏗️ Main Container Classes
+- `toastlet` - Base class applied to all notifications
+- Type-specific classes:
+  - `toastletSuccess` - Applied to success notifications
+  - `toastletError` - Applied to error notifications  
+  - `toastletInfo` - Applied to info notifications
+  - `toastletWarning` - Applied to warning notifications
+  - `toastletNotice` - Applied to notice notifications
+
+### 🧩 Component Classes
+- `toastlet-icon` - Icon container
+- `toastlet-content` - Content wrapper
+- `toastlet-title` - Title text
+- `toastlet-message` - Message text
+- `toastlet-controls` - Controls container
+- `toastlet-pause` - Pause/play button
+- `toastlet-close` - Close button
+
+### 🎨 Targeting Specific Types
+
+```css
+/* Style only success notifications */
+.toastlet.toastletSuccess {
+    border-left: 4px solid #00bc8c;
+}
+
+/* Style only error notifications */
+.toastlet.toastletError {
+    animation: shake 0.5s ease-in-out;
+}
+
+/* Style only warning notifications */
+.toastlet.toastletWarning .toastlet-title {
+    text-transform: uppercase;
+}
+
+/* Style all info notifications */
+.toastlet.toastletInfo .toastlet-message {
+    font-style: italic;
+}
 ```
 
 ---
@@ -196,6 +272,31 @@ toastletNotify.notify('warning', 'Your session has expired. Please login again.'
 });
 ```
 
+### 🎨 Advanced Customization Examples
+
+```javascript
+// Success notification with custom class and slow animation
+toastletNotify.notify('success', 'Custom styled success!', {
+    customClass: 'premium-success',
+    transition: true,
+    transitionDuration: 600
+});
+
+// Error notification without animations
+toastletNotify.notify('error', 'Critical error occurred!', {
+    sticky: true,
+    transition: false,
+    customClass: 'critical-error'
+});
+
+// Info notification with fast animation
+toastletNotify.notify('info', 'Quick info message.', {
+    delay: 2000,
+    transition: true,
+    transitionDuration: 150
+});
+```
+
 ---
 
 ## 🎨 CSS Customization
@@ -219,6 +320,12 @@ toastletNotify.notify('warning', 'Your session has expired. Please login again.'
 .toastlet .toastlet-message {
     font-style: italic;
 }
+
+/* Customize controls */
+.toastlet .toastlet-controls {
+    background: rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
 ```
 
 ### 🌈 Custom Themes
@@ -234,6 +341,18 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 .toastlet.dark-theme {
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
     color: #ffffff;
+}
+
+/* Type-specific customization */
+.toastlet.toastletSuccess.premium-success {
+    background: linear-gradient(45deg, #00bc8c, #4caf50) !important;
+    box-shadow: 0 8px 32px rgba(0,188,140,0.3);
+}
+
+.toastlet.toastletError.critical-error {
+    background: linear-gradient(45deg, #e74c3c, #c0392b) !important;
+    border: 2px solid #fff;
+    animation: pulse 1s infinite;
 }
 ```
 
@@ -256,6 +375,11 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 **Doesn't work on mobile devices:**
 - Check if viewport is configured correctly
 - Confirm touch events are being captured
+
+**Animations not working:**
+- Verify `transition` is set to `true`
+- Check `transitionDuration` is a positive number
+- Ensure no CSS transitions are conflicting
 
 ---
 
@@ -307,6 +431,7 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 - Inline CSS to reduce requests
 - Optimized event listeners
 - Automatic garbage collection
+- Conditional animation rendering
 
 ---
 
