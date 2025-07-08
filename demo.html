@@ -182,24 +182,6 @@
             margin-bottom: 15px;
         }
         
-        /* === Type-Specific & Custom Theme Styling === */
-        .toastlet.toastletSuccess {
-            border-left: 4px solid #00bc8c;
-        }
-        .toastlet.toastletError {
-            animation: shake 0.5s ease-in-out;
-        }
-        .toastlet.toastletWarning .toastlet-title {
-            text-transform: uppercase;
-        }
-        .toastlet.toastletInfo .toastlet-message {
-            font-style: italic;
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0) translateY(0); }
-            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px) translateY(0); }
-            20%, 40%, 60%, 80% { transform: translateX(5px) translateY(0); }
-        }
         .toastlet.dark-theme {
             background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
             color: #ecf0f1 !important;
@@ -238,6 +220,87 @@
             border: 1px solid rgba(255, 255, 255, 0.2) !important;
             color: white !important;
             text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+        }
+        .toastlet.neon-theme {
+            background: #0a0a0a !important;
+            color: #00ffff !important;
+            border: 2px solid #00ffff !important;
+            box-shadow: 0 0 10px #00ffff, inset 0 0 10px rgba(0,255,255,0.1) !important;
+            text-shadow: 0 0 5px #00ffff !important;
+        }
+        .toastlet.gradient-theme {
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4, #feca57) !important;
+            background-size: 300% 300% !important;
+            animation: gradientShift 3s ease infinite !important;
+            color: white !important;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.3) !important;
+        }
+        .toastlet.matrix-theme {
+            background: #000000 !important;
+            color: #00FF00 !important;
+            border: 1px solid #00FF00 !important;
+            font-family: 'Courier New', monospace !important;
+            font-size: 12px !important;
+            text-shadow: 0 0 3px #00FF00 !important;
+        }
+        .toastlet.paper-theme {
+            background: #f5f5dc !important;
+            color: #2c3e50 !important;
+            border: 1px solid #d4d4aa !important;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.1) !important;
+            font-family: 'Georgia', serif !important;
+        }
+        .toastlet.paper-theme::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: repeating-linear-gradient(
+                transparent,
+                transparent 20px,
+                #d4d4aa 20px,
+                #d4d4aa 21px
+            );
+            pointer-events: none;
+        }
+        .toastlet.cyber-theme {
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 100%) !important;
+            color: #00d4ff !important;
+            border: 2px solid #00d4ff !important;
+            box-shadow: 0 0 20px rgba(0,212,255,0.3) !important;
+            font-family: 'Courier New', monospace !important;
+        }
+        .toastlet.sunset-theme {
+            background: linear-gradient(135deg, #ff7e5f 0%, #feb47b 100%) !important;
+            color: #2c3e50 !important;
+            border: none !important;
+            box-shadow: 0 8px 32px rgba(255,126,95,0.3) !important;
+        }
+        .toastlet.ice-theme {
+            background: linear-gradient(135deg, #a8e6cf 0%, #dcedc8 100%) !important;
+            color: #2c3e50 !important;
+            border: 2px solid #81c784 !important;
+            box-shadow: 0 0 15px rgba(129,199,132,0.4) !important;
+        }
+        .toastlet.fire-theme {
+            background: linear-gradient(135deg, #ff4757 0%, #ff3838 50%, #ff6b6b 100%) !important;
+            color: white !important;
+            border: none !important;
+            box-shadow: 0 0 20px rgba(255,71,87,0.5) !important;
+            animation: fireGlow 2s ease-in-out infinite alternate !important;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        @keyframes fireGlow {
+            0% { box-shadow: 0 0 20px rgba(255,71,87,0.5); }
+            100% { box-shadow: 0 0 30px rgba(255,71,87,0.8), 0 0 40px rgba(255,71,87,0.3); }
         }
 
         /* Features Section */
@@ -546,6 +609,14 @@ toastletNotify.notify('success', 'Custom styled notification!', {
                                 <option value="elegant-theme">Elegant Theme</option>
                                 <option value="retro-theme">Retro Theme</option>
                                 <option value="glass-theme">Glass Theme</option>
+                                <option value="neon-theme">Neon Theme</option>
+                                <option value="gradient-theme">Gradient Theme</option>
+                                <option value="matrix-theme">Matrix Theme</option>
+                                <option value="paper-theme">Paper Theme</option>
+                                <option value="cyber-theme">Cyber Theme</option>
+                                <option value="sunset-theme">Sunset Theme</option>
+                                <option value="ice-theme">Ice Theme</option>
+                                <option value="fire-theme">Fire Theme</option>
                             </select>
                         </div>
                     </div>

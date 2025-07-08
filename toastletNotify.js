@@ -110,15 +110,21 @@
                     class: 'toastletNotice'
                 },
                 get: function(type){
-                    type = type.toLowerCase().trim()
-                    if(!toastletNotify.typeMap.hasOwnProperty(type)) return false
-                    map = this[type]
-                    type === 'notice' ? map.icon = toastletNotify.icons.warning : map.icon = toastletNotify.icons[type]
-                    return map
+                    if (typeof type !== 'string') return false;
+                    type = type.toLowerCase().trim();
+                    if(!toastletNotify.typeMap.hasOwnProperty(type)) return false;
+                    map = this[type];
+                    type === 'notice' ? map.icon = toastletNotify.icons.warning : map.icon = toastletNotify.icons[type];
+                    return map;
                 }
             },
 
             notify: function(type, message = "", options = {}){
+
+                if (!document.body) {
+                    console.error('[ToastletNotify] Error: document.body is not available');
+                    return false;
+                }
 
                 if( typeof type !== 'string' ){
                     const err = new Error();
@@ -150,7 +156,7 @@
                     return false;
                 }
 
-                type = type.replace(/[\s\p{Z}]+/gu, '').toLowerCase();
+                type = type.replace(/[\s\p{Z}\p{C}]+/gu, '').toLowerCase();
 
                 const notificationType = toastletNotify.typeMap.get(type) || toastletNotify.typeMap.get('info');
 
@@ -162,12 +168,17 @@
                 }
 
                 const elements = {
-                    notificationType: notificationType
+                    notificationType: notificationType,
+                    handles: {}
                 };
 
-                elements.windowResize = window.addEventListener('resize', toastletNotify.handles.window.resize.bind(null, elements));
+                elements.handles.windowResize = {};
+                elements.handles.windowResize.obj = window;
+                elements.handles.windowResize.type = 'resize';
+                elements.handles.windowResize.fn = toastletNotify.handles.window.resize.bind(null, elements);
+                window.addEventListener('resize', elements.handles.windowResize.fn);
                 
-                message = message.replace('<br>', '\n').trim();
+                message = message.replace(/<br\s*\/?>/gi, '\n').trim();
 
                 const isMobile = toastletNotify.utils.isMobile();
 
@@ -262,6 +273,7 @@
                 elements.controlsCol.className = 'toastlet-controls';
                 elements.controlsCol.style.cssText = toastletNotify.styles.constrolCol
 
+                elements.isSticky = elements.config.sticky || elements.config.delay <= 0;
                 elements.pauseButton = null;
                 elements.closeButton = null;
                 elements.timeoutId = null;
@@ -270,13 +282,22 @@
                 elements.startX = 0;
                 elements.currentX = 0;
                 elements.isDragging = false;
+                elements.isClosing = false;
+                elements.isTouchDevice = 'ontouchstart' in window;
+                elements.touchStartTime = 0;
+                elements.touchEndTime = 0;
+                elements.touchStartPosition = { x: 0, y: 0 };
 
-                if (!elements.config.sticky && elements.config.delay > 0) {
+                if (!elements.isSticky) {
                     elements.pauseButton = document.createElement('button');
                     elements.pauseButton.className = 'toastlet-pause';
                     elements.pauseButton.innerHTML = toastletNotify.icons.pause;
                     elements.pauseButton.style.cssText = toastletNotify.styles.pauseButton
-                    elements.pauseButton.addEventListener('click', toastletNotify.handles.pauseButton.click.bind(null, elements));
+                    elements.handles.pauseClickHandler = {};
+                    elements.handles.pauseClickHandler.obj = elements.pauseButton;
+                    elements.handles.pauseClickHandler.type = 'click';
+                    elements.handles.pauseClickHandler.fn = toastletNotify.handles.pauseButton.click.bind(null, elements);
+                    elements.pauseButton.addEventListener('click', elements.handles.pauseClickHandler.fn);
                     elements.controlsCol.appendChild(elements.pauseButton);
                 }
 
@@ -284,22 +305,46 @@
                 elements.closeButton.className = 'toastlet-close';
                 elements.closeButton.innerHTML = toastletNotify.icons.close;
                 elements.closeButton.style.cssText = toastletNotify.styles.closeButton
-                elements.closeButton.addEventListener('click', toastletNotify.handles.closeButton.click.bind(null, elements));
+                elements.handles.closeClickHandler = {};
+                elements.handles.closeClickHandler.obj = elements.closeButton;
+                elements.handles.closeClickHandler.type = 'click';
+                elements.handles.closeClickHandler.fn = toastletNotify.handles.closeButton.click.bind(null, elements);
+                elements.closeButton.addEventListener('click', elements.handles.closeClickHandler.fn);
                 elements.controlsCol.appendChild(elements.closeButton);
 
                 elements.toast.appendChild(elements.iconCol);
                 elements.toast.appendChild(elements.contentCol);
                 elements.toast.appendChild(elements.controlsCol);
 
-                elements.toast.addEventListener('mouseenter', toastletNotify.handles.toast.mouseenter.bind(null, elements));
+                elements.handles.mouseenterHandler = {};
+                elements.handles.mouseenterHandler.obj = elements.toast;
+                elements.handles.mouseenterHandler.type = 'mouseenter';
+                elements.handles.mouseenterHandler.fn = toastletNotify.handles.toast.mouseenter.bind(null, elements);
+                elements.toast.addEventListener('mouseenter', elements.handles.mouseenterHandler.fn);
 
-                elements.toast.addEventListener('mouseleave', toastletNotify.handles.toast.mouseleave.bind(null, elements));
+                elements.handles.mouseleaveHandler = {};
+                elements.handles.mouseleaveHandler.obj = elements.toast;
+                elements.handles.mouseleaveHandler.type = 'mouseleave';
+                elements.handles.mouseleaveHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
+                elements.toast.addEventListener('mouseleave', elements.handles.mouseleaveHandler.fn);
 
-                elements.toast.addEventListener('touchstart', toastletNotify.handles.toast.touchstart.bind(null, elements));
+                elements.handles.touchstartHandler = {};
+                elements.handles.touchstartHandler.obj = elements.toast;
+                elements.handles.touchstartHandler.type = 'touchstart';
+                elements.handles.touchstartHandler.fn = toastletNotify.handles.toast.touchstart.bind(null, elements);
+                elements.toast.addEventListener('touchstart', elements.handles.touchstartHandler.fn);
 
-                elements.toast.addEventListener('touchmove', toastletNotify.handles.toast.touchmove.bind(null, elements));
+                elements.handles.touchmoveHandler = {};
+                elements.handles.touchmoveHandler.obj = elements.toast;
+                elements.handles.touchmoveHandler.type = 'touchmove';
+                elements.handles.touchmoveHandler.fn = toastletNotify.handles.toast.touchmove.bind(null, elements);
+                elements.toast.addEventListener('touchmove', elements.handles.touchmoveHandler.fn);
 
-                elements.toast.addEventListener('touchend', toastletNotify.handles.toast.touchend.bind(null, elements));
+                elements.handles.touchendHandler = {};
+                elements.handles.touchendHandler.obj = elements.toast;
+                elements.handles.touchendHandler.type = 'touchend';
+                elements.handles.touchendHandler.fn = toastletNotify.handles.toast.touchend.bind(null, elements);
+                elements.toast.addEventListener('touchend', elements.handles.touchendHandler.fn);
 
                 document.body.appendChild(elements.toast);
 
@@ -313,7 +358,7 @@
 
                     desktop: `position:fixed;top:20px;right:20px;width:360px;min-height:80px;z-index:999999;border-radius:5px;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translateY(-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;touch-action:pan-y;`,
                     
-                    mobile: `position:fixed;top:0;right:0;left:0;width:100vw;min-height:80px;z-index:999999;border-radius:0;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:1;transform:translateY(0);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;margin:0;touch-action:pan-y;`
+                    mobile: `position:fixed;top:0;right:0;left:0;width:100vw;min-height:80px;z-index:999999;border-radius:0;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translateY(-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;margin:0;touch-action:pan-y;`
 
                 },
 
@@ -337,54 +382,82 @@
 
                 toast: {
 
-                    mouseenter: function(elements){
-                        if(elements.toast === undefined) return;
+                    mouseenter: function(elements, e){
+                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (elements.isTouchDevice && e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
                         elements.isHovered = true;
                         elements.controlsCol.style.opacity = '1';
-                        if (!elements.config.sticky && elements.config.delay > 0 && !elements.isPausedByButton) {
-                            toastletNotify.utils.pauseTimer(elements);
-                        }
+                        if (!elements.isSticky && !elements.isPausedByButton) toastletNotify.utils.pauseTimer(elements);
                     },
 
-                    mouseleave: function(elements){
-                        if(elements.toast === undefined) return;
+                    mouseleave: function(elements, e){
+                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (elements.isTouchDevice && e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
                         elements.isHovered = false;
                         elements.controlsCol.style.opacity = '0';
-                        if (!elements.config.sticky && elements.config.delay > 0 && !elements.isPausedByButton) {
-                            toastletNotify.utils.startTimer(elements);
-                        }
+                        if (!elements.isSticky && !elements.isPausedByButton) toastletNotify.utils.startTimer(elements);
                     },
 
                     touchstart: function(elements, e){
-                        if(elements.toast === undefined) return;
+                        if(elements.toast === undefined || elements.isClosing) return;
                         if (!toastletNotify.utils.isMobile()) return;
+                        elements.touchStartTime = Date.now();
                         elements.startX = e.touches[0].clientX;
                         elements.currentX = elements.startX;
-                        elements.isDragging = true;
+                        elements.isDragging = false;
+                        elements.touchStartPosition = {
+                            x: e.touches[0].clientX,
+                            y: e.touches[0].clientY
+                        };
+                        if (!elements.isSticky && !elements.isPausedByButton) toastletNotify.utils.pauseTimer(elements);
                         elements.toast.style.transition = 'none';
                     },
 
                     touchmove: function(elements, e){
-                        if(elements.toast === undefined) return;
-                        if (!elements.isDragging || !toastletNotify.utils.isMobile()) return;
+                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (!toastletNotify.utils.isMobile()) return;
                         elements.currentX = e.touches[0].clientX;
                         const diff = elements.currentX - elements.startX;
-                        elements.toast.style.transform = `translateX(${diff}px)`;
+                        elements.toast.style.transform = `translate(${diff}px, 0px)`;
+                        const currentX = e.touches[0].clientX;
+                        const currentY = e.touches[0].clientY;
+                        const deltaX = Math.abs(currentX - elements.touchStartPosition.x);
+                        const deltaY = Math.abs(currentY - elements.touchStartPosition.y);
+                        if (deltaX > 10 && deltaX > deltaY) elements.isDragging = true;
                     },
 
                     touchend: function(elements){
-                        if(elements.toast === undefined) return;
-                        if (!elements.isDragging || !toastletNotify.utils.isMobile()) return;
-                        elements.isDragging = false;
+                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (!toastletNotify.utils.isMobile()) return;
+                        elements.touchEndTime = Date.now();
+                        const touchDuration = elements.touchEndTime - elements.touchStartTime;
                         elements.toast.style.transition = `all ${elements.config.transitionDuration}ms ease-in-out`;
-                        
-                        const diff = elements.currentX - elements.startX;
-                        if (Math.abs(diff) > 100) {
-                            elements.toast.style.opacity = '0';
-                            setTimeout(toastletNotify.timeouts.remove, elements.config.transitionDuration + 20, elements);
+                        if (elements.isDragging) {
+                            const diff = elements.currentX - elements.startX;
+                            if (Math.abs(diff) > 100) {
+                                toastletNotify.utils.clearTime(elements);
+                                elements.toast.style.opacity = '0';
+                                if (diff > 0) elements.toast.style.transform = 'translate(100%, 0px)';
+                                else elements.toast.style.transform = 'translate(-100%, 0px)';
+                                setTimeout(toastletNotify.timeouts.remove, elements.config.transitionDuration + 20, elements);
+                            } else {
+                                elements.toast.style.transform = 'translate(0px, 0px)';
+                                if (!elements.isSticky && !elements.isPausedByButton) toastletNotify.utils.startTimer(elements);
+                            }
                         } else {
-                            elements.toast.style.transform = 'translateX(0)';
+                            elements.toast.style.transform = `translate(0px, 0px)`;
+                            if (touchDuration < 300) {
+                                if (!elements.isSticky) {
+                                    if( ! elements.isPausedByButton ) elements.controlsCol.style.opacity = '1';
+                                    else elements.controlsCol.style.opacity = '0';
+                                    toastletNotify.utils.togglePauseByButton(elements);
+                                }
+                            } else {
+                                if (!elements.isSticky && !elements.isPausedByButton) 
+                                    toastletNotify.utils.startTimer(elements);
+                            }
                         }
+                        elements.isDragging = false;
                     }
 
                 },
@@ -392,7 +465,7 @@
                 closeButton: {
 
                     click: function(elements, e){
-                        if(elements.toast === undefined) return;
+                        if(elements.toast === undefined || elements.isClosing) return;
                         e.stopPropagation();
                         toastletNotify.utils.closeToast(elements);
                     }
@@ -401,7 +474,7 @@
 
                 pauseButton: {
                     click: function(elements, e){
-                        if(elements.toast === undefined) return;
+                        if(elements.toast === undefined || elements.isClosing) return;
                         e.stopPropagation();
                         toastletNotify.utils.togglePauseByButton(elements);
                     }
@@ -409,11 +482,23 @@
 
                 window: {
                     resize: function(elements){
-                        if(elements.toast === undefined) return;
-                        if(toastletNotify.utils.isMobile())
-                            elements.toast.style.cssText = elements.toastStyle.mobile
-                        else
-                            elements.toast.style.cssText = elements.toastStyle.desktop
+                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(toastletNotify.utils.isMobile()){
+                            elements.toast.style.top = '0';
+                            elements.toast.style.right = '0';
+                            elements.toast.style.left = '0';
+                            elements.toast.style.width = '100vw';
+                            elements.toast.style.borderRadius = '0';
+                            elements.toast.style.margin = '0';
+                        }
+                        else{
+                            elements.toast.style.top = '20px';
+                            elements.toast.style.right = '20px';
+                            elements.toast.style.left = 'auto';
+                            elements.toast.style.width = '360px';
+                            elements.toast.style.borderRadius = '5px';
+                            elements.toast.style.margin = 'auto';
+                        }
                     }
                 }
 
@@ -422,23 +507,30 @@
             timeouts: {
 
                 enter: function(elements){
-                    if(elements.toast === undefined) return;
+                    if(elements.toast === undefined || elements.isClosing) return;
                     elements.toast.style.opacity = '1';
                     elements.toast.style.transform = 'translateY(0)';
-                    if (!elements.config.sticky && elements.config.delay > 0) toastletNotify.utils.setStartEnterTimer(elements);
+                    if (!elements.isSticky) toastletNotify.utils.setStartEnterTimer(elements);
                 },
 
                 startEnterTime: function(elements){
-                    if(elements.toast === undefined) return;
-                    if (!elements.config.sticky && elements.config.delay > 0) toastletNotify.utils.startTimer(elements);
+                    if(elements.toast === undefined || elements.isClosing) return;
+                    if (!elements.isSticky) toastletNotify.utils.startTimer(elements);
                 },
 
                 remove: function(elements){
                     if(elements.toast === undefined) return;
+                    elements.isClosing = true;
+                    toastletNotify.utils.clearTime(elements);
+                    for( const key in elements.handles) {
+                        if( elements.handles.hasOwnProperty(key) && elements.handles[key] && elements.handles[key].obj && elements.handles[key].fn ){
+                            elements.handles[key].obj.removeEventListener(elements.handles[key].type, elements.handles[key].fn);
+                        }
+                    }
                     elements.toast.remove();
-                    window.removeEventListener('resize', elements.windowResize);
                     for (const key in elements) {
                         if (elements.hasOwnProperty(key)) {
+                            elements[key] = null;
                             delete elements[key];
                         }
                     }
@@ -449,34 +541,41 @@
             utils: {
 
                 isMobile: function(){
-                    return window.innerWidth <= 768;
+                    return window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                },
+
+                clearTime: function(elements){
+                    if(elements.timeoutId){
+                        clearTimeout(elements.timeoutId);
+                        elements.timeoutId = null;
+                    }
                 },
 
                 enterElement: function(elements){
-                    if(elements.toast === undefined) return;
+                    if(elements.toast === undefined || elements.isClosing) return;
                     setTimeout(toastletNotify.timeouts.enter, 0, elements);
                 },
 
                 setStartEnterTimer: function(elements){
-                    if(elements.toast === undefined) return;
+                    if(elements.toast === undefined || elements.isClosing) return;
                     setTimeout(toastletNotify.timeouts.startEnterTime, elements.config.transitionDuration, elements);
                 },
 
                 startTimer: function(elements){
-                    if(elements.toast === undefined) return;
-                    if (elements.timeoutId) clearTimeout(elements.timeoutId);
+                    if(elements.toast === undefined || elements.isClosing) return;
+                    toastletNotify.utils.clearTime(elements);
                     elements.timeoutId = setTimeout(toastletNotify.utils.closeToast, elements.config.delay, elements);
                     if (elements.pauseButton) elements.pauseButton.innerHTML = toastletNotify.icons.pause;
                 },
 
                 pauseTimer: function(elements){
-                    if(elements.toast === undefined) return;
-                    if (elements.timeoutId) clearTimeout(elements.timeoutId);
+                    if(elements.toast === undefined || elements.isClosing) return;
+                    toastletNotify.utils.clearTime(elements);
                     elements.timeoutId = null;
                 },
 
                 togglePauseByButton: function(elements){
-                    if(elements.toast === undefined) return;
+                    if(elements.toast === undefined || elements.isClosing) return;
                     elements.isPausedByButton = !elements.isPausedByButton;
                     
                     if (elements.isPausedByButton) {
@@ -488,8 +587,9 @@
                 },
 
                 closeToast: function(elements){
-                    if(elements.toast === undefined) return;
-                    if (elements.timeoutId) clearTimeout(elements.timeoutId);
+                    if(elements.toast === undefined || elements.isClosing) return;
+                    elements.isClosing = true;
+                    toastletNotify.utils.clearTime(elements);
                     elements.toast.style.opacity = '0';
                     elements.toast.style.transform = 'translateY(-20px)';
                     setTimeout(toastletNotify.timeouts.remove, elements.config.transitionDuration + 20, elements);
