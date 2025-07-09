@@ -12,11 +12,11 @@
  * toastletNotify.notify('success', 'Operation completed successfully');
  * 
  * 🎨 Supported Types:
- * - ℹ️ info - For general information messages
+ * - 🔔 notice - For system announcements and general notifications
+ * - ℹ️ info - For contextual tips and helpful explanations
  * - ✅ success - For successful operations
  * - ⚠️ warning - For warning messages
  * - ❌ error - For error notifications
- * - 📝 notice - Alternative styling for notifications
  * 
  * 🧩 Advanced Usage:
  * toastletNotify.notify('success', 'Data saved!', {
@@ -70,6 +70,8 @@
 
                 error: `<svg width="18" height="18" viewBox="0 0 576 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg>`,
 
+                notice: `<svg width="18" height="18" viewBox="0 0 448 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z"/></svg>`,
+
                 pause: `<svg width="16" height="16" viewBox="0 0 448 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M144 479H48c-26.5 0-48-21.5-48-48V79c0-26.5 21.5-48 48-48h96c26.5 0 48 21.5 48 48v352c0 26.5-21.5 48-48 48zm304-48V79c0-26.5-21.5-48-48-48h-96c-26.5 0-48 21.5-48 48v352c0 26.5 21.5 48 48 48h96c26.5 0 48-21.5 48-48z"/></svg>`,
 
                 play: `<svg width="16" height="16" viewBox="0 0 448 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M424.4 214.7L72.4 6.6C43.8-10.3 0 6.1 0 47.9V464c0 37.5 40.7 60.1 72.4 41.3l352-208c31.4-18.5 31.5-64.1 0-82.6z"/></svg>`,
@@ -104,7 +106,7 @@
                     class: 'toastletError'
                 },
                 notice: { 
-                    color: '#F39C12', 
+                    color: '#708090', 
                     icon: null,
                     name: 'Notice',
                     class: 'toastletNotice'
@@ -114,7 +116,7 @@
                     type = type.toLowerCase().trim();
                     if(!toastletNotify.typeMap.hasOwnProperty(type)) return false;
                     map = this[type];
-                    type === 'notice' ? map.icon = toastletNotify.icons.warning : map.icon = toastletNotify.icons[type];
+                    map.icon = toastletNotify.icons[type];
                     return map;
                 }
             },
@@ -158,7 +160,7 @@
 
                 type = type.replace(/[\s\p{Z}\p{C}]+/gu, '').toLowerCase();
 
-                const notificationType = toastletNotify.typeMap.get(type) || toastletNotify.typeMap.get('info');
+                const notificationType = toastletNotify.typeMap.get(type);
 
                 if(!notificationType){
                     const err = new Error();
