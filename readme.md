@@ -508,6 +508,7 @@ MIT License - Toastlet Notify code is free for commercial and personal use.
 ### Attributions
 - Visual styling inspired by [PNotify 4+](https://github.com/sciactive/pnotify) by SciActive Inc, which is licensed under the Apache 2.0 license.
 - Design elements inspired by Bootstrap styling.
+- Icons from [Font Awesome](https://fontawesome.com/) (v5.15.4), licensed under [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
 
 Per Apache License requirements, no modification has been made to the original PNotify code - this project only draws inspiration from its visual appearance.
 
