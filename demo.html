@@ -107,6 +107,9 @@
         }
 
         .demo-card {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             border-radius: 12px;
             padding: 25px;
@@ -147,6 +150,13 @@
             margin-bottom: 10px;
         }
 
+        .btn.btn-card{
+            margin: 0;
+            margin-bottom: 10px;
+            width: 100%;
+            text-align: center;
+        }
+
         .btn:hover {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
@@ -174,7 +184,7 @@
         .code-block pre {
             margin: 0;
             padding: 0;
-            white-space: pre-line;
+            white-space: pre-wrap;
         }
 
         /* Installation Section */
@@ -314,7 +324,7 @@
         /* Features Section */
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
             margin: 30px 0;
         }
@@ -354,7 +364,7 @@
 
         .form-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 20px;
         }
 
@@ -463,10 +473,15 @@
         /* Footer */
         .footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 40px 10px;
             color: white;
             background: rgba(0,0,0,0.2);
             margin-top: 60px;
+        }
+
+        .footer p{
+            margin: 0;
+            margin-bottom: 10px;
         }
 
         .footer a {
@@ -489,10 +504,24 @@
             .section {
                 padding: 30px 20px;
             }
-            .demo-grid, .form-grid, .features-grid {
-                grid-template-columns: 1fr;
-            }
         }
+
+        @media (max-width: 425px) {
+
+            /* .demo-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            }
+
+            .form-grid {
+                grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+            }
+
+            .features-grid {
+                grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            } */
+
+        }
+
     </style>
 </head>
 <body>
@@ -509,7 +538,7 @@
         </header>
 
         <main class="main-content">
-            <section class="section">
+            <section class="section section-installation">
                 <h2>🚀 Installation & Usage</h2>
                 <p>Start using Toastlet Notify in seconds. Just include the CDN link and you're ready to go!</p>
                 
@@ -523,14 +552,13 @@
                 <div class="installation">
                     <h3>⚡ Basic Usage</h3>
                     <div class="code-block">
-                        <pre><code class="language-javascript"> // Simple notification
-                                    toastletNotify.notify('success', 'Operation completed successfully!');
+                        <pre><code class="language-javascript">// Simple notification
+toastletNotify.notify('success', 'Operation completed successfully!');
                                     
-                                    // With options
-                                    toastletNotify.notify('warning', 'Please check your input', {
-                                        delay: 10000,
-                                    });
-                        </code></pre>
+// With options
+toastletNotify.notify('warning', 'Please check your input', {
+    delay: 10000,
+});</code></pre>
                     </div>
                 </div>
  
@@ -538,66 +566,64 @@
                     <h3>🎨 Custom CSS Example</h3>
                     <div class="code-block">
                         <pre><code>/* Example of a dark theme */
-                                    .toastlet.dark-theme {
-                                        background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
-                                        color: #ecf0f1 !important;
-                                        border-left: 4px solid #3498db !important;
-                                    }
-                        </code></pre>
+.toastlet.dark-theme {
+    background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%) !important;
+    color: #ecf0f1 !important;
+    border-left: 4px solid #3498db !important;
+}</code></pre>
                         <pre><code class="language-javascript">/* Usage */
-                                    toastletNotify.notify('success', 'Notification with custom style!', {
-                                        customClass: 'dark-theme'
-                                    });
-                        </code></pre>
+toastletNotify.notify('success', 'Notification with custom style!', {
+    customClass: 'dark-theme'
+});</code></pre>
                     </div>
                 </div>                
          
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>🎯 Notification Types</h2>
                 <p>Try out all notification types and see how they work in real-time. Each type has a distinct style to match its purpose and context.</p>
                 
-                <div class="demo-grid">
+                <div class="div-grid demo-grid">
                     <div class="demo-card">
                         <h3>✅ Success</h3>
                         <p>Confirms completed actions and positive outcomes to reassure users</p>
-                        <button class="btn btn-success" onclick="showSuccess()">Show Notification</button>
+                        <button class="btn btn-card btn-success" onclick="showSuccess()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('success', 'Your changes have been saved successfully!');</code></pre></div>
                     </div>
                     
                     <div class="demo-card">
                         <h3>❌ Error</h3>
                         <p>Alerts users to problems that require attention or immediate action</p>
-                        <button class="btn btn-error" onclick="showError()">Show Notification</button>
+                        <button class="btn btn-card btn-error" onclick="showError()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('error', 'Could not connect to the server. Please try again.');</code></pre></div>
                     </div>
                     
                     <div class="demo-card">
                         <h3>ℹ️ Info</h3>
                         <p>Provides context, explanations, and useful guidance in a neutral tone</p>
-                        <button class="btn btn-info" onclick="showInfo()">Show Notification</button>
+                        <button class="btn btn-card btn-info" onclick="showInfo()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('info', 'You can drag and drop files here to upload.');</code></pre></div>
                     </div>
                     
                     <div class="demo-card">
                         <h3>⚠️ Warning</h3>
                         <p>Warns users about potential issues before they become critical</p>
-                        <button class="btn btn-warning" onclick="showWarning()">Show Notification</button>
+                        <button class="btn btn-card btn-warning" onclick="showWarning()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('warning', 'Your session will expire in 5 minutes.');</code></pre></div>
                     </div>
                     
                     <div class="demo-card">
                         <h3>🔔 Notice</h3>
                         <p>Delivers system announcements, updates, and general awareness messages</p>
-                        <button class="btn btn-notice" onclick="showNotice()">Show Notification</button>
+                        <button class="btn btn-card btn-notice" onclick="showNotice()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('notice', 'System maintenance is scheduled for 2 AM today.');</code></pre></div>
                     </div>
                     
                     <div class="demo-card">
                         <h3>🧲 Sticky</h3>
                         <p>Persistent notifications that remain visible until dismissed by the user</p>
-                        <button class="btn" onclick="showSticky()">Show Notification</button>
+                        <button class="btn btn-card" onclick="showSticky()">Show Notification</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('info', 'This notification will remain visible until you dismiss it.', {
     sticky: true
 });</code></pre></div>
@@ -605,15 +631,15 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>⚙️ Settings & Customizations</h2>
                 <p>Explore Toastlet Notify's advanced options to customize the behavior and appearance of notifications.</p>
                 
-                <div class="demo-grid">
+                <div class="div-grid demo-grid">
                     <div class="demo-card">
                         <h3>🧲 Sticky Notification</h3>
                         <p>Notifications that stay on screen until manually dismissed by the user</p>
-                        <button class="btn btn-warning" onclick="showStickyExample()">Show Example</button>
+                        <button class="btn btn-card btn-warning" onclick="showStickyExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('warning', 'This notification is sticky!', {
     sticky: true
 });</code></pre></div>
@@ -622,7 +648,7 @@
                     <div class="demo-card">
                         <h3>⏱️ Custom Duration (Delay)</h3>
                         <p>Control how long the notification stays visible before automatically disappearing</p>
-                        <button class="btn btn-info" onclick="showDelayExample()">Show Example</button>
+                        <button class="btn btn-card btn-info" onclick="showDelayExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('info', 'This notification lasts for 10 seconds.', {
     delay: 10000
 });</code></pre></div>
@@ -631,7 +657,7 @@
                     <div class="demo-card">
                         <h3>🎨 Custom Class</h3>
                         <p>Apply custom CSS styles to create unique themes and distinct visuals</p>
-                        <button class="btn btn-success" onclick="showCustomClassExample()">Show Example</button>
+                        <button class="btn btn-card btn-success" onclick="showCustomClassExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('success', 'Notification with a dark theme!', {
     customClass: 'dark-theme'
 });</code></pre></div>
@@ -640,7 +666,7 @@
                     <div class="demo-card">
                         <h3>🎞️ No Transition</h3>
                         <p>Disable animations for a more direct and instantaneous experience</p>
-                        <button class="btn btn-error" onclick="showNoTransitionExample()">Show Example</button>
+                        <button class="btn btn-card btn-error" onclick="showNoTransitionExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('error', 'No animations!', {
     transition: false
 });</code></pre></div>
@@ -649,7 +675,7 @@
                     <div class="demo-card">
                         <h3>🐌 Slow Transition</h3>
                         <p>Customize the speed of animations to create smoother and more elegant effects</p>
-                        <button class="btn btn-notice" onclick="showSlowTransitionExample()">Show Example</button>
+                        <button class="btn btn-card btn-notice" onclick="showSlowTransitionExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('notice', 'Slower animation!', {
     transitionDuration: 800
 });</code></pre></div>
@@ -658,7 +684,7 @@
                     <div class="demo-card">
                         <h3>🌈 Combining Options</h3>
                         <p>Combine multiple settings to create fully customized notifications</p>
-                        <button class="btn" onclick="showCombinedExample()">Show Example</button>
+                        <button class="btn btn-card" onclick="showCombinedExample()">Show Example</button>
                         <div class="code-block"><pre><code class="language-javascript">toastletNotify.notify('success', 'Customized notification!', {
     sticky: true,
     customClass: 'rainbow-theme',
@@ -668,12 +694,12 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>🛠️ Custom Demo</h2>
                 <p>Create your own notification with custom settings and see the generated code below.</p>
                 
                 <div class="custom-demo">
-                    <div class="form-grid">
+                    <div class="div-grid form-grid">
                         <div class="form-group">
                             <label for="customType">Notification Type</label>
                             <select id="customType">
@@ -711,7 +737,7 @@
                         <textarea id="customMessage" placeholder="Enter your notification message here...">This is a custom notification message!</textarea>
                     </div>
 
-                    <div class="form-grid">
+                    <div class="div-grid form-grid">
                         <div class="form-group">
                              <label for="customDelay">Auto-close Delay (ms)</label>
                              <input type="number" id="customDelay" value="5000" min="0" step="100">
@@ -739,15 +765,15 @@
                         </div>
                     </div>
                     
-                    <button class="btn" onclick="showCustom()">Show Custom Notification</button>
+                    <button class="btn btn-card" onclick="showCustom()">Show Custom Notification</button>
                     
-                    <div id="generatedCode" class="code-block" style="display: none; margin-top: 20px;"></div>
+                    <div id="generatedCode" class="code-block" style="display: none; margin-top: 20px;"><pre><code class="language-javascript"></code></pre></div>
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>🎨 Features</h2>
-                <div class="features-grid">
+                <div class="div-grid features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">📱</div>
                         <h4>Mobile Ready</h4>
@@ -781,54 +807,54 @@
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>📊 Use Cases</h2>
                 <p>See how Toastlet Notify can be used in real-world scenarios.</p>
-                <div class="demo-grid">
+                <div class="div-grid demo-grid">
                     <div class="demo-card">
                         <h3>📝 Form Validation</h3>
                         <p>Show validation errors and success messages</p>
-                        <button class="btn btn-error" onclick="showFormError()">Validation Error</button>
-                        <button class="btn btn-success" onclick="showFormSuccess()">Form Submitted</button>
+                        <button class="btn btn-card btn-error" onclick="showFormError()">Validation Error</button>
+                        <button class="btn btn-card btn-success" onclick="showFormSuccess()">Form Submitted</button>
                     </div>
                     <div class="demo-card">
                         <h3>💾 Save Operations</h3>
                         <p>Feedback for save, update, and delete operations</p>
-                        <button class="btn btn-info" onclick="showAutoSave()">Auto-Save</button>
-                        <button class="btn btn-success" onclick="showManualSave()">Manual Save</button>
+                        <button class="btn btn-card btn-info" onclick="showAutoSave()">Auto-Save</button>
+                        <button class="btn btn-card btn-success" onclick="showManualSave()">Manual Save</button>
                     </div>
                     <div class="demo-card">
                         <h3>🔐 Authentication</h3>
                         <p>Login, logout, and session management</p>
-                        <button class="btn btn-success" onclick="showLogin()">Login Success</button>
-                        <button class="btn btn-warning" onclick="showSession()">Session Warning</button>
+                        <button class="btn btn-card btn-success" onclick="showLogin()">Login Success</button>
+                        <button class="btn btn-card btn-warning" onclick="showSession()">Session Warning</button>
                     </div>
                     <div class="demo-card">
                         <h3>🔄 API Responses</h3>
                         <p>Handle success and error responses from APIs</p>
-                        <button class="btn btn-info" onclick="showLoading()">Loading...</button>
-                        <button class="btn btn-error" onclick="showAPIError()">API Error</button>
+                        <button class="btn btn-card btn-info" onclick="showLoading()">Loading...</button>
+                        <button class="btn btn-card btn-error" onclick="showAPIError()">API Error</button>
                     </div>
                 </div>
             </section>
 
-            <section class="section">
+            <section class="section section-grid">
                 <h2>🔗 Links</h2>
-                <div class="demo-grid">
+                <div class="div-grid demo-grid">
                      <div class="demo-card">
                         <h3>📚 GitHub</h3>
                         <p>View the source code, documentation, and contribute.</p>
-                        <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS" target="_blank" class="btn">Go to Repository</a>
+                        <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS" target="_blank" class="btn btn-card">Go to Repository</a>
                     </div>
                      <div class="demo-card">
                         <h3>🐛 Report a Bug</h3>
                         <p>Found a problem? Let me know by opening an issue on GitHub.</p>
-                        <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS/issues" target="_blank" class="btn btn-error">Report Bug</a>
+                        <a href="https://github.com/pedrohrigolin/Toastlet-Notify-JS/issues" target="_blank" class="btn btn-card btn-error">Report Bug</a>
                     </div>
                      <div class="demo-card">
                         <h3>📄 License</h3>
                         <p>Toastlet Notify is licensed under the MIT License.</p>
-                         <a href="https://opensource.org/licenses/MIT" target="_blank" class="btn btn-info">View License</a>
+                         <a href="https://opensource.org/licenses/MIT" target="_blank" class="btn btn-card btn-info">View License</a>
                     </div>
                 </div>
             </section>            
@@ -848,6 +874,115 @@
     </div>
 
     <script>
+
+        const minGridWidth = 300; // Minimum default width for grid items
+
+        const divGrid = document.getElementsByClassName("div-grid");
+
+        const divInstallation = document.getElementsByClassName("installation");
+
+        const divCustomDemo = document.getElementsByClassName("custom-demo");
+
+        function gridResize() {
+
+            const gridLength = divGrid.length;
+
+            for(let i=0; i<gridLength; i++){
+
+                const parentElement = divGrid[i].parentElement;
+
+                const parentComputedStyle = getComputedStyle(parentElement);
+
+                const parentWidth = parentElement.getBoundingClientRect().width;
+
+                const parentPaddingLeft = parseFloat(parentComputedStyle.paddingLeft);
+
+                const parentPaddingRigth = parseFloat(parentComputedStyle.paddingRight);
+
+                const parentInternalWidth = parentWidth - parentPaddingLeft - parentPaddingRigth;
+
+                if(parentInternalWidth < minGridWidth){
+
+                    divGrid[i].style.gridTemplateColumns = `repeat(auto-fit, minmax(${parentInternalWidth}px, 1fr))`;
+
+                }
+                else{
+
+                    const divComputedStyle = getComputedStyle(divGrid[i]);
+
+                    const divTemplateColumns = parseFloat(divComputedStyle.gridTemplateColumns);
+
+                    if(divTemplateColumns !== minGridWidth){
+
+                        divGrid[i].style.gridTemplateColumns = `repeat(auto-fit, minmax(${minGridWidth}px, 1fr))`;
+
+                    }
+
+                }
+
+            }
+
+        }
+
+        function installationResize() {
+
+            const installationLength = divInstallation.length;
+
+            for(let i=0; i<installationLength; i++){
+
+                const parentElement = divInstallation[i].parentElement;
+
+                const parentComputedStyle = getComputedStyle(parentElement);
+
+                const parentWidth = parentElement.getBoundingClientRect().width;
+
+                const parentPaddingLeft = parseFloat(parentComputedStyle.paddingLeft);
+
+                const parentPaddingRigth = parseFloat(parentComputedStyle.paddingRight);
+
+                const parentInternalWidth = parentWidth - parentPaddingLeft - parentPaddingRigth;
+
+                divInstallation[i].style.maxWidth = `${parentInternalWidth}px`;
+
+            }
+
+        } 
+        
+        function customDemoResize() {
+
+            const customDemoLength = divCustomDemo.length;
+
+            for(let i=0; i<customDemoLength; i++){
+
+                const parentElement = divCustomDemo[i].parentElement;
+
+                const parentComputedStyle = getComputedStyle(parentElement);
+
+                const parentWidth = parentElement.getBoundingClientRect().width;
+
+                const parentPaddingLeft = parseFloat(parentComputedStyle.paddingLeft);
+
+                const parentPaddingRigth = parseFloat(parentComputedStyle.paddingRight);
+
+                const parentInternalWidth = parentWidth - parentPaddingLeft - parentPaddingRigth;
+
+                divCustomDemo[i].style.maxWidth = `${parentInternalWidth}px`;
+
+            }
+
+        }         
+
+        function elementsResize(){
+
+            gridResize();
+
+            installationResize();
+
+            customDemoResize();
+
+        }
+
+        window.addEventListener("resize", elementsResize);
         
         // Basic notification demos
         function showSuccess() {
@@ -977,12 +1112,22 @@
             
             code += ');';
             
-            codeElement.textContent = code;
+            const codeBlock = codeElement.querySelector('code');
+
+            codeBlock.textContent = code;
+
+            codeBlock.removeAttribute("data-highlighted");
+
+            hljs.highlightElement(codeBlock);
+
             codeElement.style.display = 'block';
+
         }
 
         // UI interactivity for the custom demo form
         document.addEventListener('DOMContentLoaded', function() {
+
+            elementsResize();
 
             hljs.highlightAll();
 
@@ -1015,6 +1160,7 @@
             }, 1000);
 
         });
+
     </script>
 </body>
 </html>
