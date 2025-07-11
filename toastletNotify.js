@@ -60,6 +60,8 @@
 
         value: Object.freeze({
 
+            toastlets: document.getElementsByClassName('toastlet'),
+
             icons: {
 
                 success: `<svg width="18" height="18" viewBox="0 0 512 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"/></svg>`,
@@ -348,7 +350,14 @@
                 elements.handles.touchendHandler.fn = toastletNotify.handles.toast.touchend.bind(null, elements);
                 elements.toast.addEventListener('touchend', elements.handles.touchendHandler.fn);
 
-                document.body.appendChild(elements.toast);
+                Object.defineProperty(elements.toast, 'isRealToastlet', {
+
+                    value: true,
+                    writable: false,
+                    enumerable: false,
+                    configurable: false
+
+                })
 
                 toastletNotify.utils.enterElement(elements);
 
@@ -555,6 +564,12 @@
 
                 enterElement: function(elements){
                     if(elements.toast === undefined || elements.isClosing) return;
+                    const toastLength = toastletNotify.toastlets.length;
+                    for(let i=0; i<toastLength; i++){
+                        if(toastletNotify.toastlets[i].hasOwnProperty('isRealToastlet') && toastletNotify.toastlets[i].isRealToastlet === true)
+                            toastletNotify.toastlets[i].querySelector(".toastlet-close").click();
+                    }
+                    document.body.appendChild(elements.toast);
                     setTimeout(toastletNotify.timeouts.enter, 0, elements);
                 },
 

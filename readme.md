@@ -141,6 +141,23 @@ toastletNotify.notify('warning', 'Also no transitions!', {
     transitionDuration: 0  // Functionally equivalent to transition: false
 });
 ```
+---
+
+### 🔄 Notification Replacement Behavior
+
+Toastlet Notify uses a single-notification model - when a new notification is triggered while another is active, the existing notification is automatically closed and replaced with the new one. This behavior is fundamental to the library's design and cannot be modified, even through custom code.
+
+```javascript
+// First notification appears
+toastletNotify.notify('info', 'Loading data...');
+
+// Shortly after, this notification will replace the previous one
+setTimeout(() => {
+  toastletNotify.notify('success', 'Data loaded successfully!');
+}, 1000);
+```
+
+If your application requires multiple simultaneous notifications or a notification queue, you should consider one of the alternatives listed in the "Advanced Alternatives" section.
 
 ---
 
@@ -405,8 +422,8 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 
 **Multiple notifications not all visible:**
 - This is expected behavior - Toastlet Notify displays only the most recent notification
-- New notifications replace existing ones by design
-- For queuing or stacking multiple notifications, custom implementation would be required
+- New notifications always replace existing ones by design (this cannot be modified)
+- For queuing or stacking multiple notifications, use an alternative library
 - Consider adding delay between notification calls if sequential display is needed
 
 ---
