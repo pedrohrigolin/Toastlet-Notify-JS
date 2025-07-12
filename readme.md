@@ -4,7 +4,7 @@
 
 **Ultra-lightweight, zero-dependency JavaScript toast notification library**
 
-Toastlet Notify is a plug-and-play solution for displaying toast notifications in web applications. Designed for developers who want something that works immediately without complex setup or configuration. Simply include the script, call `toastletNotify.notify('success', 'Message')`, and you're done. With design inspired by PNotify 4+ and Bootstrap styling, it delivers essential notification functionality with maximum simplicity and minimal overhead.
+Toastlet Notify is a plug-and-play solution for displaying toast notifications in web applications. Designed for developers who want something that works immediately without complex setup or configuration. Simply include the script, call `toastletNotify.notify('success', 'Message')`, and you're done. With design inspired by PNotify 4+ and Bootstrap styling, it delivers essential notification functionality with smart user experience features, comprehensive accessibility support, and automatic state management - all with maximum simplicity and minimal overhead.
 
 ---
 
@@ -143,21 +143,41 @@ toastletNotify.notify('warning', 'Also no transitions!', {
 ```
 ---
 
-### 🔄 Notification Replacement Behavior
+## 🧠 Smart Behavior and UX
 
-Toastlet Notify uses a single-notification model - when a new notification is triggered while another is active, the existing notification is automatically closed and replaced with the new one. This behavior is fundamental to the library's design and cannot be modified, even through custom code.
+Toastlet Notify is designed to "do the right thing" by default, ensuring a smooth and predictable user experience.
 
-```javascript
-// First notification appears
-toastletNotify.notify('info', 'Loading data...');
+### 🔄 Notification Management (One at a Time)
 
-// Shortly after, this notification will replace the previous one
-setTimeout(() => {
-  toastletNotify.notify('success', 'Data loaded successfully!');
-}, 1000);
-```
+To keep the interface clean, only one notification is displayed at a time. If a new notification is triggered while another is active, the existing notification is gracefully dismissed with a smooth animation to make way for the new one. This ensures that the most recent feedback is always the primary focus.
 
-If your application requires multiple simultaneous notifications or a notification queue, you should consider one of the alternatives listed in the "Advanced Alternatives" section.
+### ⏱️ Smart Timer Pausing
+
+The auto-close timer intelligently pauses to ensure users never miss a message. The countdown stops if any of the following conditions occur:
+
+- 🖱️ **Mouse Hover:** User positions the mouse over the notification.
+- ⌨️ **Keyboard Focus:** The notification or one of its buttons receives keyboard focus.
+- ⏸️ **Pause Button:** User clicks the pause button.
+- 📄 **Inactive Tab:** User switches tabs or minimizes the browser (using the Page Visibility API).
+
+The timer only resumes when **all** of these conditions are cleared.
+
+---
+
+## ♿ Accessibility (a11y)
+
+The library is built with a strong focus on accessibility to ensure all users can interact with notifications.
+
+### 🔊 Screen Reader Support
+
+- **Automatic Announcements:** Notifications are automatically announced by screen readers using appropriate `role="alert"` (for Error/Warning) and `role="status"` (for other types), ensuring information is effectively communicated.
+- **Descriptive Labels:** All interactive buttons (Pause, Close) have `aria-label` attributes that describe their function.
+
+### ⌨️ Complete Keyboard Navigation
+
+- **Focus:** The notification and its controls can be navigated using the `Tab` key.
+- **Control Activation:** The Pause and Close buttons can be activated using `Enter` or `Space` keys.
+- **Dismiss with Escape:** The notification can be dismissed at any time by pressing the `Escape` key.
 
 ---
 
@@ -226,6 +246,7 @@ Each notification automatically includes several CSS classes for targeted stylin
 - **Pause/Play:** Pauses/resumes the automatic close timer
 - **Close:** Manually removes the notification
 - **Hover:** Automatically pauses when mouse is over the notification
+- **Keyboard Navigation:** Complete keyboard support with Tab, Enter, Space, and Escape keys
 
 ### 📱 Mobile Support
 
@@ -425,6 +446,7 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 - New notifications always replace existing ones by design (this cannot be modified)
 - For queuing or stacking multiple notifications, use an alternative library
 - Consider adding delay between notification calls if sequential display is needed
+- See [Smart Behavior and UX](#-smart-behavior-and-ux) section for more details
 
 ---
 
