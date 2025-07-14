@@ -67,8 +67,6 @@
 
         value: Object.freeze({
 
-            toastlets: document.getElementsByClassName('toastlet'),
-
             icons: {
 
                 success: `<svg width="18" height="18" viewBox="0 0 512 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"/></svg>`,
@@ -107,11 +105,11 @@
                 
                 text: `word-break:break-word;white-space:pre-line;font-weight:400;line-height:1.5;height:100%;display:flex;align-content:center;flex-wrap:wrap;`,
                     
-                constrolCol: `padding:15px 15px 15px 10px;display:flex;gap:12px;align-items:flex-start;opacity:0;transition:opacity 0.2s ease;`,
+                constrolCol: `padding:15px 15px 15px 10px;display:flex;gap:12px;align-items:flex-start;opacity:0;transition:opacity 0.2s ease-in-out;`,
 
-                pauseButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s;`,
+                pauseButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;`,
 
-                closeButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s;`
+                closeButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;`
                 
             },            
 
@@ -160,7 +158,7 @@
 
                     if(!toastletNotify.typeMap.hasOwnProperty(type)) return false;
 
-                    map = toastletNotify.typeMap[type];
+                    const map = toastletNotify.typeMap[type];
 
                     map.icon = toastletNotify.icons[type];
 
@@ -211,6 +209,14 @@
 
                 },
 
+                pointerEvent: function(elements){
+
+                    if(elements.toast === undefined || elements.isClosing) return;
+
+                    elements.isPointerEvent = false;
+
+                },
+
                 focusin: function(elements){
 
                     if(elements.toast === undefined || elements.isClosing) return;
@@ -233,7 +239,27 @@
 
                     toastletNotify.timeouts.startTimer(elements);                    
 
-                },                
+                },
+                
+                blur: function(elements, blurElement){
+
+                    if(elements.toast === undefined || elements.isClosing) return;
+
+                    if(blurElement === undefined || blurElement === null) return;
+
+                    blurElement.blur();
+
+                },
+
+                focus: function(elements, focusElement){
+
+                    if(elements.toast === undefined || elements.isClosing) return;
+
+                    if(focusElement === undefined || focusElement === null) return;
+
+                    focusElement.focus();
+
+                },
 
                 remove: function(elements){
 
@@ -262,6 +288,8 @@
                     }
 
                     elements.toast.remove();
+                    elements.observerBody.disconnect();
+                    elements.observerHtml.disconnect();
 
                     for (const key in elements) {
 
@@ -281,28 +309,26 @@
 
             utils: {
 
-                isMobile: function(){
-                    return window.innerWidth <= 768 || 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+                isMobile: function(elements){
+
+                    if(elements.toast === undefined || elements.isClosing) return;
+
+                    return !(window.innerWidth > 768 && elements.canHover.matches && elements.pointerFine.matches);
+
                 },
 
                 enterElement: function(elements){
 
                     if(elements.toast === undefined || elements.isClosing) return;
                     
-                    const toastLength = toastletNotify.toastlets.length;
-                
-                    for(let i=0; i<toastLength; i++){
-                
-                        if(
-                            toastletNotify.toastlets[i].hasOwnProperty('isRealToastlet') && 
-                            toastletNotify.toastlets[i].isRealToastlet === true
-                        ){
-
-                            toastletNotify.toastlets[i].querySelector(".toastlet-close").click();
-
+                    document.dispatchEvent(new CustomEvent('toastletCreated', 
+                        { 
+                            bubbles: false,
+                            composed: false,
+                            cancelable: false,
+                            detail: elements.toast 
                         }
-                
-                    }
+                    ));
                 
                     document.body.appendChild(elements.toast);
                 
@@ -387,7 +413,7 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if (elements.isTouchDevice && e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
+                        if (!elements.canHover.matches || !elements.pointerFine.matches || elements.isPointerEvent || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) return;
                         
                         elements.isHovered = true;
 
@@ -401,7 +427,7 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if (elements.isTouchDevice && e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents) return;
+                        if (elements.isPointerEvent || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) return;
                         
                         elements.isHovered = false;
 
@@ -415,7 +441,9 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if (!toastletNotify.utils.isMobile()) return;
+                        elements.isPointerEvent = true;
+
+                        if (!toastletNotify.utils.isMobile(elements)) return;
 
                         elements.touchStartTime = Date.now();
 
@@ -440,7 +468,7 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if (!toastletNotify.utils.isMobile()) return;
+                        if (!toastletNotify.utils.isMobile(elements)) return;
 
                         elements.currentX = e.touches[0].clientX;
 
@@ -463,7 +491,7 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if (!toastletNotify.utils.isMobile()) return;
+                        if (!toastletNotify.utils.isMobile(elements)) return;
 
                         elements.touchEndTime = Date.now();
 
@@ -512,20 +540,74 @@
                         }
 
                         elements.isDragging = false;
-                    
-                    },
 
-                    focusin: function(elements) {
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                    },
+                    
+                    pointerdown: function(elements){
 
                         if(elements.toast === undefined || elements.isClosing) return;
+
+                        elements.isPointerEvent = true;
+
+                    },
+
+                    pointerup: function(elements){
+
+                        if(elements.toast === undefined || elements.isClosing) return;
+
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                    },
+
+                    mousedown: function(elements){
+
+                        if(elements.toast === undefined || elements.isClosing) return;
+
+                        elements.isPointerEvent = true;
+
+                    },
+
+                    mouseup: function(elements){
+
+                        if(elements.toast === undefined || elements.isClosing) return;
+
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                    },
+
+                    focusin: function(elements, e) {
+
+                        if(elements.toast === undefined || elements.isClosing) return;
+
+                        if(!e.isTrusted || elements.isPointerEvent || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)){
+
+                            e.target.blur();
+
+                            setTimeout(toastletNotify.timeouts.blur, 0, elements, e.target);
+
+                            return;
+
+                        }
 
                         setTimeout(toastletNotify.timeouts.focusin, 0, elements);
 
                     },
 
-                    focusout: function(elements) {
+                    focusout: function(elements, e) {
 
                         if(elements.toast === undefined || elements.isClosing) return;
+
+                        if(!e.isTrusted){
+
+                            e.target.focus();
+
+                            setTimeout(toastletNotify.timeouts.focus, 0, elements, e.target);
+
+                            return;
+
+                        }
 
                         setTimeout(toastletNotify.timeouts.focusout, 0, elements);
                     
@@ -533,7 +615,7 @@
 
                     keydown: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         if(e.target === elements.pauseButton)
                             return toastletNotify.handles.pauseButton.keydown(elements, e);
@@ -567,9 +649,7 @@
 
                     click: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        elements.closeButton.blur();
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         e.stopPropagation();
 
@@ -579,7 +659,7 @@
 
                     keydown: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         if(e.target !== elements.closeButton) return;
 
@@ -608,9 +688,7 @@
 
                     click: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        elements.pauseButton.blur();
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         e.stopPropagation();
 
@@ -620,7 +698,7 @@
 
                     keydown: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         if(e.target !== elements.pauseButton) return;
 
@@ -651,7 +729,12 @@
 
                         if(elements.toast === undefined || elements.isClosing) return;
 
-                        if(toastletNotify.utils.isMobile()) {
+                        if(toastletNotify.utils.isMobile(elements)) {
+
+                            if(elements.isPausedByButton){
+                                elements.isTouchHovered = true;
+                                toastletNotify.utils.shButtons(elements);
+                            }
 
                             elements.toast.style.top = '0';
                             elements.toast.style.right = '0';
@@ -662,6 +745,11 @@
 
                         }
                         else {
+
+                            if(elements.isTouchHovered && !elements.isHovered && !elements.isFocusHovered) {
+                                elements.isTouchHovered = false;
+                                toastletNotify.utils.shButtons(elements);
+                            }
 
                             elements.toast.style.top = '20px';
                             elements.toast.style.right = '20px';
@@ -692,6 +780,45 @@
                             toastletNotify.timeouts.startTimer(elements);
 
                         }
+
+                    },
+
+                    toastletCreated: function(elements, e){
+
+                        if(elements.toast === undefined || elements.isClosing || e.detail === elements.toast) return;
+
+                        toastletNotify.utils.closeToast(elements, "0px", "-20px");
+
+                    }
+
+                },
+
+                body: {
+
+                    mutation: function(elements, mutationList, observer){
+
+                        if(elements.toast === undefined || elements.isClosing){
+                            observer.disconnect();
+                            return;
+                        }
+
+                        if(elements.toast.parentElement !== document.body || !elements.toast.isConnected)
+                            setTimeout(toastletNotify.timeouts.remove, 0, elements);
+
+                    }
+
+                },
+
+                html: {
+
+                    mutation: function(elements, mutationList, observer){
+
+                        if(elements.toast === undefined || elements.isClosing){
+                            observer.disconnect();
+                            return;
+                        }
+
+                        if(!document.body) setTimeout(toastletNotify.timeouts.remove, 0, elements);
 
                     }
 
@@ -749,22 +876,46 @@
                     return false;
                 }
 
-                const elements = {
-                    notificationType: notificationType,
-                    handles: {}
-                };
-                
                 message = message.replace(/<br\s*\/?>/gi, '\n').trim();
 
-                const isMobile = toastletNotify.utils.isMobile();
-
-                elements.config = {
-                    sticky: false,
-                    delay: 5000,
-                    customClass: '',
-                    transition: true,
-                    transitionDuration: 300,
-                    ...options
+                const elements = {
+                    notificationType: notificationType,
+                    canHover: window.matchMedia('(any-hover: hover)'),
+                    pointerFine: window.matchMedia('(any-pointer: fine)'),
+                    timeoutId: null,
+                    isPausedByButton: false,
+                    isPointerEvent: false,
+                    isHovered: false,
+                    isTouchHovered: false,
+                    isFocusHovered: false,
+                    startX: 0,
+                    currentX: 0,
+                    isDragging: false,
+                    isClosing: false,
+                    touchStartTime: 0,
+                    touchEndTime: 0,
+                    touchStartPosition: { x: 0, y: 0 },
+                    config: {
+                        sticky: false,
+                        delay: 5000,
+                        customClass: '',
+                        transition: true,
+                        transitionDuration: 300,
+                        ...options
+                    },
+                    toastStyle: {
+                        desktop: toastletNotify.styles.toast['desktop'] + `background-color: ${notificationType.color};`,
+                        mobile: toastletNotify.styles.toast['mobile'] + `background-color: ${notificationType.color};`
+                    },
+                    observerConfig: {
+                        childList: true,
+                        subtree: false,
+                        attributes: false,
+                        characterData: false,
+                        attributeOldValue: false,
+                        characterDataOldValue: false
+                    },
+                    handles: {}
                 };
 
                 if(typeof elements.config.sticky !== 'boolean'){
@@ -810,15 +961,7 @@
 
                 elements.isSticky = elements.config.sticky || elements.config.delay <= 0;
 
-                elements.config.customClass = elements.config.customClass.replace(/[\s\p{Z}]+/gu, ' ').trim()
-
-                elements.toastStyle = {
-                    desktop: toastletNotify.styles.toast['desktop'],
-                    mobile: toastletNotify.styles.toast['mobile']
-                }
-
-                elements.toastStyle.desktop += `background-color: ${elements.notificationType.color};`
-                elements.toastStyle.mobile += `background-color: ${elements.notificationType.color};`            
+                elements.config.customClass = elements.config.customClass.replace(/[\s\p{Z}]+/gu, ' ').trim();           
 
                 const role = (type === "error" || type === "warning") ? "alert" : "status";
                 const ariaLive = role === "alert" ? "assertive" : "polite";
@@ -829,7 +972,7 @@
                 elements.toast.setAttribute("aria-live", ariaLive);
                 elements.toast.setAttribute("aria-atomic", "true");
                 elements.toast.className = `toastlet ${elements.notificationType.class} ${elements.config.customClass}`.trim();
-                elements.toast.style.cssText = elements.toastStyle[isMobile ? 'mobile' : 'desktop'] + `transition: all ${elements.config.transitionDuration}ms ease-in-out`;
+                elements.toast.style.cssText = elements.toastStyle[toastletNotify.utils.isMobile(elements) ? 'mobile' : 'desktop'] + `transition: all ${elements.config.transitionDuration}ms ease-in-out`;
 
                 elements.iconCol = document.createElement('div');
                 elements.iconCol.className = 'toastlet-icon';
@@ -891,20 +1034,6 @@
                 elements.toast.appendChild(elements.iconCol);
                 elements.toast.appendChild(elements.contentCol);
                 elements.toast.appendChild(elements.controlsCol);     
-                
-                elements.timeoutId = null;
-                elements.isPausedByButton = false;
-                elements.isHovered = false;
-                elements.isTouchHovered = false;
-                elements.isFocusHovered = false;
-                elements.startX = 0;
-                elements.currentX = 0;
-                elements.isDragging = false;
-                elements.isClosing = false;
-                elements.isTouchDevice = 'ontouchstart' in window;
-                elements.touchStartTime = 0;
-                elements.touchEndTime = 0;
-                elements.touchStartPosition = { x: 0, y: 0 };
 
                 elements.handles.closeClickHandler = {};
                 elements.handles.closeClickHandler.obj = elements.closeButton;
@@ -954,6 +1083,30 @@
                 elements.handles.touchendHandler.fn = toastletNotify.handles.toast.touchend.bind(null, elements);
                 elements.toast.addEventListener('touchend', elements.handles.touchendHandler.fn);
 
+                elements.handles.pointerdownHandler = {};
+                elements.handles.pointerdownHandler.obj = elements.toast;
+                elements.handles.pointerdownHandler.type = 'pointerdown';
+                elements.handles.pointerdownHandler.fn = toastletNotify.handles.toast.pointerdown.bind(null, elements);
+                elements.toast.addEventListener('pointerdown', elements.handles.pointerdownHandler.fn);
+
+                elements.handles.pointerupHandler = {};
+                elements.handles.pointerupHandler.obj = elements.toast;
+                elements.handles.pointerupHandler.type = 'pointerup';
+                elements.handles.pointerupHandler.fn = toastletNotify.handles.toast.pointerup.bind(null, elements);
+                elements.toast.addEventListener('pointerup', elements.handles.pointerupHandler.fn);
+
+                elements.handles.mousedownHandler = {};
+                elements.handles.mousedownHandler.obj = elements.toast;
+                elements.handles.mousedownHandler.type = 'mousedown';
+                elements.handles.mousedownHandler.fn = toastletNotify.handles.toast.mousedown.bind(null, elements);
+                elements.toast.addEventListener('mousedown', elements.handles.mousedownHandler.fn);
+
+                elements.handles.mouseupHandler = {};
+                elements.handles.mouseupHandler.obj = elements.toast;
+                elements.handles.mouseupHandler.type = 'mouseup';
+                elements.handles.mouseupHandler.fn = toastletNotify.handles.toast.mouseup.bind(null, elements);
+                elements.toast.addEventListener('mouseup', elements.handles.mouseupHandler.fn);
+
                 elements.handles.keydownHandler = {};
                 elements.handles.keydownHandler.obj = elements.toast;
                 elements.handles.keydownHandler.type = 'keydown';
@@ -972,14 +1125,17 @@
                 elements.handles.documentVisibilityChange.fn = toastletNotify.handles.document.visibilityChange.bind(null, elements);
                 document.addEventListener('visibilitychange', elements.handles.documentVisibilityChange.fn);
 
-                Object.defineProperty(elements.toast, 'isRealToastlet', {
+                elements.handles.toastletCreated = {};
+                elements.handles.toastletCreated.obj = document;
+                elements.handles.toastletCreated.type = 'toastletCreated';
+                elements.handles.toastletCreated.fn = toastletNotify.handles.document.toastletCreated.bind(null, elements);
+                document.addEventListener('toastletCreated', elements.handles.toastletCreated.fn);
 
-                    value: true,
-                    writable: false,
-                    enumerable: false,
-                    configurable: false
+                elements.observerBody = new MutationObserver(toastletNotify.handles.body.mutation.bind(null, elements));
+                elements.observerBody.observe(document.body, elements.observerConfig);
 
-                });
+                elements.observerHtml = new MutationObserver(toastletNotify.handles.html.mutation.bind(null, elements));
+                elements.observerHtml.observe(document.documentElement, elements.observerConfig);
 
                 Object.preventExtensions(elements);
 

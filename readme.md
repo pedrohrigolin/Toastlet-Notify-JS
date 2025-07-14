@@ -448,6 +448,12 @@ toastletNotify.notify('info', 'Dark theme activated!', {
 - Consider adding delay between notification calls if sequential display is needed
 - See [Smart Behavior and UX](#-smart-behavior-and-ux) section for more details
 
+**Performance degradation after many notifications:**
+- Not an issue with this library - all resources are properly cleaned up
+- Event listeners are automatically removed when notifications are dismissed
+- Memory is efficiently reclaimed through complete reference cleanup
+- No memory leaks even with frequent notification calls
+
 ---
 
 ## 🛡️ Compatibility
@@ -518,7 +524,7 @@ While Toastlet Notify is designed for simplicity and lightweight performance, so
 
 ### 🚀 Metrics
 
-- **Size:** ~19KB (minified) / ~5KB (gzipped)
+- **Size:** ~26KB (minified) / ~6KB (gzipped)
 - **Dependencies:** Zero
 - **Compatibility:** ES2018+
 
@@ -526,9 +532,36 @@ While Toastlet Notify is designed for simplicity and lightweight performance, so
 
 - Inline CSS to eliminate external requests
 - Efficient DOM operations with minimal reflows
-- Optimized event listeners with automatic cleanup
 - Smart animation handling with conditional rendering
-- Memory-efficient design with proper cleanup
+- Minimal footprint with no external dependencies
+- **Robust event listener management with automatic cleanup to prevent memory leaks**
+- **Clean component lifecycle with proper state tracking and garbage collection**
+
+---
+
+## 🧹 Memory Management & Lifecycle
+
+Toastlet Notify implements professional-grade resource management to ensure optimal performance even with frequent usage.
+
+### 🔄 Component Lifecycle
+
+- **Creation:** DOM elements are efficiently created with minimal reflows
+- **State Tracking:** All notification states are tracked internally
+- **Event Binding:** Event listeners are centrally registered for proper cleanup
+- **Destruction:** Complete resource cleanup when notifications are dismissed
+
+### 🗑️ Memory Cleanup
+
+- **Event Listeners:** All event handlers are automatically removed
+- **DOM References:** References to DOM elements are nullified
+- **Timers/Intervals:** All timers are properly cleared to prevent callbacks after element removal
+- **MutationObservers:** Observers are disconnected when no longer needed
+
+### 🔍 Developer Benefits
+
+- **No Memory Leaks:** Long-running applications remain performant
+- **Clean Garbage Collection:** Memory is properly reclaimed after notifications
+- **Predictable Behavior:** Consistent notification management regardless of frequency
 
 ---
 
@@ -552,3 +585,5 @@ MIT License - Toastlet Notify code is free for commercial and personal use.
 Per Apache License requirements, no modification has been made to the original PNotify code - this project only draws inspiration from its visual appearance.
 
 **Developed by Pedro Rigolin** 👨‍💻
+
+---
