@@ -524,7 +524,7 @@ While Toastlet Notify is designed for simplicity and lightweight performance, so
 
 ### 🚀 Metrics
 
-- **Size:** ~26KB (minified) / ~6KB (gzipped)
+- **Size:** ~29KB (minified) / ~6.5KB (gzipped)
 - **Dependencies:** Zero
 - **Compatibility:** ES2018+
 

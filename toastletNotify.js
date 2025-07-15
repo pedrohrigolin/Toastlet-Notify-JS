@@ -91,9 +91,9 @@
 
                 toast: {
 
-                    desktop: `position:fixed;top:20px;right:20px;width:360px;min-height:80px;z-index:999999;border-radius:5px;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translate(0px,-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;touch-action:pan-y;`,
+                    desktop: `position:fixed;top:20px;right:20px;width:360px;min-height:80px;z-index:999999;border-radius:5px;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translate(0px,-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;touch-action:pan-y;-webkit-tap-highlight-color:transparent;user-select:none;`,
                     
-                    mobile: `position:fixed;top:0;right:0;left:0;width:100vw;min-height:80px;z-index:999999;border-radius:0;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translate(0px,-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;margin:0;touch-action:pan-y;`
+                    mobile: `position:fixed;top:0;right:0;left:0;width:100vw;min-height:80px;z-index:999999;border-radius:0;color:#fff;box-shadow:0 6px 28px 0 rgb(0 0 0 / .1);display:grid;grid-template-columns:auto 1fr auto;opacity:0;transform:translate(0px,-20px);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:15px;line-height:1.1;margin:0;touch-action:pan-y;-webkit-tap-highlight-color:transparent;user-select:none;`
 
                 },
 
@@ -105,11 +105,11 @@
                 
                 text: `word-break:break-word;white-space:pre-line;font-weight:400;line-height:1.5;height:100%;display:flex;align-content:center;flex-wrap:wrap;`,
                     
-                constrolCol: `padding:15px 15px 15px 10px;display:flex;gap:12px;align-items:flex-start;opacity:0;transition:opacity 0.2s ease-in-out;`,
+                constrolCol: `padding:15px 15px 15px 10px;display:flex;gap:12px;align-items:flex-start;opacity:0;visibility:hidden;z-index:-1;transition:all 0.2s ease-in-out;`,
 
-                pauseButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;`,
+                pauseButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;-webkit-tap-highlight-color:transparent;user-select:none;`,
 
-                closeButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;`
+                closeButton: `background:none;border:none;cursor:pointer;padding:2px;opacity:1;transition:opacity 0.2s ease-in-out;-webkit-tap-highlight-color:transparent;user-select:none;`
                 
             },            
 
@@ -214,6 +214,14 @@
                     if(elements.toast === undefined || elements.isClosing) return;
 
                     elements.isPointerEvent = false;
+
+                },
+
+                touchEvent: function(elements){
+
+                    if(elements.toast === undefined || elements.isClosing) return;
+
+                    elements.isTouchEvent = false;
 
                 },
 
@@ -340,10 +348,16 @@
 
                     if(elements.toast === undefined || elements.isClosing) return;
 
-                    if(!elements.isHovered && !elements.isTouchHovered && !elements.isFocusHovered)
+                    if(!elements.isHovered && !elements.isTouchHovered && !elements.isFocusHovered){
                         elements.controlsCol.style.opacity = '0';
-                    else
+                        elements.controlsCol.style.visibility = 'hidden';
+                        elements.controlsCol.style.zIndex = '-1';
+                    }
+                    else{
+                        elements.controlsCol.style.visibility = 'visible';
+                        elements.controlsCol.style.zIndex = 'auto';
                         elements.controlsCol.style.opacity = '1';
+                    }
 
                 },
 
@@ -409,12 +423,45 @@
 
                 toast: {
 
+                    mousedown: function(elements, e){
+
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing || 
+                            !e.isTrusted || 
+                            elements.isTouchEvent
+                        ) return;
+
+                        elements.isPointerEvent = true;
+
+                    },
+
+                    mouseup: function(elements, e){
+
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing || 
+                            !e.isTrusted || 
+                            elements.isTouchEvent
+                        ) return;
+
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                    },
+
                     mouseenter: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (
+                            elements.toast === undefined ||
+                            elements.isClosing ||
+                            !e.isTrusted ||
+                            elements.isHovered ||
+                            !elements.canHover.matches || 
+                            !elements.pointerFine.matches || 
+                            elements.isPointerEvent || 
+                            (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)
+                        ) return;
 
-                        if (!elements.canHover.matches || !elements.pointerFine.matches || elements.isPointerEvent || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) return;
-                        
                         elements.isHovered = true;
 
                         toastletNotify.utils.shButtons(elements);
@@ -425,25 +472,38 @@
 
                     mouseleave: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if (
+                            elements.toast === undefined ||
+                            elements.isClosing ||
+                            !e.isTrusted ||
+                            !elements.isHovered ||
+                            elements.toast.contains(e.relatedTarget) || 
+                            elements.isTouchEvent || 
+                            (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)
+                        ) return;
 
-                        if (elements.isPointerEvent || (e.sourceCapabilities && e.sourceCapabilities.firesTouchEvents)) return;
-                        
                         elements.isHovered = false;
 
                         toastletNotify.utils.shButtons(elements);
 
                         toastletNotify.timeouts.startTimer(elements);
 
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
                     },
 
                     touchstart: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing || 
+                            !e.isTrusted ||
+                            !toastletNotify.utils.isMobile(elements)
+                        ) return;
 
                         elements.isPointerEvent = true;
 
-                        if (!toastletNotify.utils.isMobile(elements)) return;
+                        elements.isTouchEvent = true;
 
                         elements.touchStartTime = Date.now();
 
@@ -464,11 +524,39 @@
 
                     },
 
+                    touchcancel: function(elements){
+
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing || 
+                            !e.isTrusted ||
+                            !elements.isTouchEvent
+                        ) return;
+
+                        setTimeout(toastletNotify.timeouts.touchEvent, 10, elements);
+
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                        elements.isDragging = false;
+
+                        elements.toast.style.transition = `all ${elements.config.transitionDuration}ms ease-in-out`;
+
+                        elements.toast.style.transform = 'translate(0px, 0px)';
+
+                        toastletNotify.timeouts.startTimer(elements);
+
+                    },
+
                     touchmove: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing ||
+                            !e.isTrusted ||
+                            !elements.isTouchEvent
+                        ) return;
 
-                        if (!toastletNotify.utils.isMobile(elements)) return;
+                        e.preventDefault();
 
                         elements.currentX = e.touches[0].clientX;
 
@@ -487,11 +575,18 @@
 
                     },
 
-                    touchend: function(elements){
+                    touchend: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(
+                            elements.toast === undefined || 
+                            elements.isClosing ||
+                            !e.isTrusted ||
+                            !elements.isTouchEvent
+                        ) return;
 
-                        if (!toastletNotify.utils.isMobile(elements)) return;
+                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
+
+                        setTimeout(toastletNotify.timeouts.touchEvent, 10, elements);
 
                         elements.touchEndTime = Date.now();
 
@@ -522,6 +617,8 @@
 
                             elements.toast.style.transform = `translate(0px, 0px)`;
 
+                            if( (elements.pauseButton && elements.pauseButton.contains(e.target)) || elements.closeButton.contains(e.target) ) return;
+
                             if (touchDuration < 300) {
 
                                 elements.isTouchHovered = !elements.isTouchHovered;
@@ -540,40 +637,6 @@
                         }
 
                         elements.isDragging = false;
-
-                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
-
-                    },
-                    
-                    pointerdown: function(elements){
-
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        elements.isPointerEvent = true;
-
-                    },
-
-                    pointerup: function(elements){
-
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
-
-                    },
-
-                    mousedown: function(elements){
-
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        elements.isPointerEvent = true;
-
-                    },
-
-                    mouseup: function(elements){
-
-                        if(elements.toast === undefined || elements.isClosing) return;
-
-                        setTimeout(toastletNotify.timeouts.pointerEvent, 10, elements);
 
                     },
 
@@ -653,6 +716,10 @@
 
                         e.stopPropagation();
 
+                        elements.isTouchHovered = false;
+
+                        toastletNotify.utils.shButtons(elements);
+
                         toastletNotify.utils.closeToast(elements);
 
                     },
@@ -692,6 +759,10 @@
 
                         e.stopPropagation();
 
+                        elements.isTouchHovered = false;
+
+                        toastletNotify.utils.shButtons(elements);
+
                         toastletNotify.utils.togglePauseByButton(elements);
 
                     },
@@ -725,9 +796,9 @@
 
                 window: {
 
-                    resize: function(elements){
+                    resize: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         if(toastletNotify.utils.isMobile(elements)) {
 
@@ -766,9 +837,9 @@
 
                 document: {
 
-                    visibilityChange: function(elements){
+                    visibilityChange: function(elements, e){
 
-                        if(elements.toast === undefined || elements.isClosing) return;
+                        if(elements.toast === undefined || elements.isClosing || !e.isTrusted) return;
 
                         if(document.visibilityState === 'hidden') {
 
@@ -885,6 +956,7 @@
                     timeoutId: null,
                     isPausedByButton: false,
                     isPointerEvent: false,
+                    isTouchEvent: false,
                     isHovered: false,
                     isTouchHovered: false,
                     isFocusHovered: false,
@@ -1041,17 +1113,29 @@
                 elements.handles.closeClickHandler.fn = toastletNotify.handles.closeButton.click.bind(null, elements);
                 elements.closeButton.addEventListener('click', elements.handles.closeClickHandler.fn);
 
-                elements.handles.focusinHandler = {};
-                elements.handles.focusinHandler.obj = elements.toast;
-                elements.handles.focusinHandler.type = 'focusin';
-                elements.handles.focusinHandler.fn = toastletNotify.handles.toast.focusin.bind(null, elements);
-                elements.toast.addEventListener('focusin', elements.handles.focusinHandler.fn);
+                elements.handles.mouseupHandler = {};
+                elements.handles.mouseupHandler.obj = elements.toast;
+                elements.handles.mouseupHandler.type = 'mouseup';
+                elements.handles.mouseupHandler.fn = toastletNotify.handles.toast.mouseup.bind(null, elements);
+                elements.toast.addEventListener('mouseup', elements.handles.mouseupHandler.fn);
+                
+                elements.handles.pointerupHandler = {};
+                elements.handles.pointerupHandler.obj = elements.toast;
+                elements.handles.pointerupHandler.type = 'pointerup';
+                elements.handles.pointerupHandler.fn = toastletNotify.handles.toast.mouseup.bind(null, elements);
+                elements.toast.addEventListener('pointerup', elements.handles.pointerupHandler.fn);
 
-                elements.handles.focusoutHandler = {};
-                elements.handles.focusoutHandler.obj = elements.toast;
-                elements.handles.focusoutHandler.type = 'focusout';
-                elements.handles.focusoutHandler.fn = toastletNotify.handles.toast.focusout.bind(null, elements);
-                elements.toast.addEventListener('focusout', elements.handles.focusoutHandler.fn);
+                elements.handles.mousedownHandler = {};
+                elements.handles.mousedownHandler.obj = elements.toast;
+                elements.handles.mousedownHandler.type = 'mousedown';
+                elements.handles.mousedownHandler.fn = toastletNotify.handles.toast.mousedown.bind(null, elements);
+                elements.toast.addEventListener('mousedown', elements.handles.mousedownHandler.fn);
+
+                elements.handles.pointerdownHandler = {};
+                elements.handles.pointerdownHandler.obj = elements.toast;
+                elements.handles.pointerdownHandler.type = 'pointerdown';
+                elements.handles.pointerdownHandler.fn = toastletNotify.handles.toast.mousedown.bind(null, elements);
+                elements.toast.addEventListener('pointerdown', elements.handles.pointerdownHandler.fn);
 
                 elements.handles.mouseenterHandler = {};
                 elements.handles.mouseenterHandler.obj = elements.toast;
@@ -1065,11 +1149,41 @@
                 elements.handles.mouseleaveHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
                 elements.toast.addEventListener('mouseleave', elements.handles.mouseleaveHandler.fn);
 
+                elements.handles.mouseoutHandler = {};
+                elements.handles.mouseoutHandler.obj = elements.toast;
+                elements.handles.mouseoutHandler.type = 'mouseout';
+                elements.handles.mouseoutHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
+                elements.toast.addEventListener('mouseout', elements.handles.mouseoutHandler.fn);
+
+                elements.handles.pointerleaveHandler = {};
+                elements.handles.pointerleaveHandler.obj = elements.toast;
+                elements.handles.pointerleaveHandler.type = 'pointerleave';
+                elements.handles.pointerleaveHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
+                elements.toast.addEventListener('pointerleave', elements.handles.pointerleaveHandler.fn);
+
+                elements.handles.pointeroutHandler = {};
+                elements.handles.pointeroutHandler.obj = elements.toast;
+                elements.handles.pointeroutHandler.type = 'pointerout';
+                elements.handles.pointeroutHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
+                elements.toast.addEventListener('pointerout', elements.handles.pointeroutHandler.fn);
+
                 elements.handles.touchstartHandler = {};
                 elements.handles.touchstartHandler.obj = elements.toast;
                 elements.handles.touchstartHandler.type = 'touchstart';
                 elements.handles.touchstartHandler.fn = toastletNotify.handles.toast.touchstart.bind(null, elements);
                 elements.toast.addEventListener('touchstart', elements.handles.touchstartHandler.fn);
+
+                elements.handles.touchcancelHandler = {};
+                elements.handles.touchcancelHandler.obj = elements.toast;
+                elements.handles.touchcancelHandler.type = 'touchcancel';
+                elements.handles.touchcancelHandler.fn = toastletNotify.handles.toast.touchcancel.bind(null, elements);
+                elements.toast.addEventListener('touchcancel', elements.handles.touchcancelHandler.fn);
+
+                elements.handles.pointercancelHandler = {};
+                elements.handles.pointercancelHandler.obj = elements.toast;
+                elements.handles.pointercancelHandler.type = 'pointercancel';
+                elements.handles.pointercancelHandler.fn = toastletNotify.handles.toast.mouseleave.bind(null, elements);
+                elements.toast.addEventListener('pointercancel', elements.handles.pointercancelHandler.fn);
 
                 elements.handles.touchmoveHandler = {};
                 elements.handles.touchmoveHandler.obj = elements.toast;
@@ -1083,30 +1197,18 @@
                 elements.handles.touchendHandler.fn = toastletNotify.handles.toast.touchend.bind(null, elements);
                 elements.toast.addEventListener('touchend', elements.handles.touchendHandler.fn);
 
-                elements.handles.pointerdownHandler = {};
-                elements.handles.pointerdownHandler.obj = elements.toast;
-                elements.handles.pointerdownHandler.type = 'pointerdown';
-                elements.handles.pointerdownHandler.fn = toastletNotify.handles.toast.pointerdown.bind(null, elements);
-                elements.toast.addEventListener('pointerdown', elements.handles.pointerdownHandler.fn);
+                elements.handles.focusinHandler = {};
+                elements.handles.focusinHandler.obj = elements.toast;
+                elements.handles.focusinHandler.type = 'focusin';
+                elements.handles.focusinHandler.fn = toastletNotify.handles.toast.focusin.bind(null, elements);
+                elements.toast.addEventListener('focusin', elements.handles.focusinHandler.fn);
 
-                elements.handles.pointerupHandler = {};
-                elements.handles.pointerupHandler.obj = elements.toast;
-                elements.handles.pointerupHandler.type = 'pointerup';
-                elements.handles.pointerupHandler.fn = toastletNotify.handles.toast.pointerup.bind(null, elements);
-                elements.toast.addEventListener('pointerup', elements.handles.pointerupHandler.fn);
-
-                elements.handles.mousedownHandler = {};
-                elements.handles.mousedownHandler.obj = elements.toast;
-                elements.handles.mousedownHandler.type = 'mousedown';
-                elements.handles.mousedownHandler.fn = toastletNotify.handles.toast.mousedown.bind(null, elements);
-                elements.toast.addEventListener('mousedown', elements.handles.mousedownHandler.fn);
-
-                elements.handles.mouseupHandler = {};
-                elements.handles.mouseupHandler.obj = elements.toast;
-                elements.handles.mouseupHandler.type = 'mouseup';
-                elements.handles.mouseupHandler.fn = toastletNotify.handles.toast.mouseup.bind(null, elements);
-                elements.toast.addEventListener('mouseup', elements.handles.mouseupHandler.fn);
-
+                elements.handles.focusoutHandler = {};
+                elements.handles.focusoutHandler.obj = elements.toast;
+                elements.handles.focusoutHandler.type = 'focusout';
+                elements.handles.focusoutHandler.fn = toastletNotify.handles.toast.focusout.bind(null, elements);
+                elements.toast.addEventListener('focusout', elements.handles.focusoutHandler.fn);
+                
                 elements.handles.keydownHandler = {};
                 elements.handles.keydownHandler.obj = elements.toast;
                 elements.handles.keydownHandler.type = 'keydown';
