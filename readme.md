@@ -13,7 +13,7 @@ Toastlet Notify is a plug-and-play solution for displaying toast notifications i
 ### 📦 Via CDN (Recommended)
 
 ```html
-<script src="https://cdn.jsdelivr.net/gh/pedrohrigolin/Toastlet-Notify-JS@main/toastletNotify.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/pedrohrigolin/Toastlet-Notify-JS@1.0.0/toastletNotify.min.js"></script>
 ```
 
 ### 📥 Local Download
