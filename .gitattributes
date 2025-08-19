@@ -1,3 +1,14 @@
+# Ensure all text files use LF line endings in the repo
+* text=auto eol=lf
+
+# Force specific files as binary (no conversion)
+*.{png,jpg,jpeg,gif,ico,pdf,zip,rar} binary
+
+# Ignore file permission changes (executable bits)
+* -text
+# or
+* !executable
+
 # Ignore HTML and CSS files for GitHub language statistics
 # This ensures the repository shows as a JavaScript project
 
