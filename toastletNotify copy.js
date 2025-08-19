@@ -340,7 +340,10 @@
                     type: 'warning',
                     color: '#F39C12', 
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 512 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.997-111.043 248-248 248S8 392.997 8 256C8 119.083 119.043 8 256 8s248 111.083 248 248zm-248 50c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg>`,
+                    name: 'Warning',
                     class: 'toastlet-warning',
+                    role: 'alert',
+                    ariaLive: 'assertive',
                     config: Object.freeze({
                         a11y: {
                             role: 'alert',
@@ -354,7 +357,10 @@
                     type: 'info',
                     color: '#3498DB', 
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 512 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M256 8C119.043 8 8 119.083 8 256c0 136.997 111.043 248 248 248s248-111.003 248-248C504 119.083 392.957 8 256 8zm0 110c23.196 0 42 18.804 42 42s-18.804 42-42 42-42-18.804-42-42 18.804-42 42-42zm56 254c0 6.627-5.373 12-12 12h-88c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h12v-64h-12c-6.627 0-12-5.373-12-12v-24c0-6.627 5.373-12 12-12h64c6.627 0 12 5.373 12 12v100h12c6.627 0 12 5.373 12 12v24z"/></svg>`,
+                    name: 'Info',
                     class: 'toastlet-info',
+                    role: 'status',
+                    ariaLive: 'polite',
                     config: Object.freeze({
                         a11y: {
                             role: 'status',
@@ -368,7 +374,10 @@
                     type: 'success',
                     color: '#00bc8c', 
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 512 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z"/></svg>`,
+                    name: 'Success!',
                     class: 'toastlet-success',
+                    role: 'status',
+                    ariaLive: 'polite',
                     config: Object.freeze({
                         a11y: {
                             role: 'status',
@@ -382,7 +391,10 @@
                     type: 'error',
                     color: '#E74C3C', 
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 576 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M569.517 440.013C587.975 472.007 564.806 512 527.94 512H48.054c-36.937 0-59.999-40.055-41.577-71.987L246.423 23.985c18.467-32.009 64.72-31.951 83.154 0l239.94 416.028zM288 354c-25.405 0-46 20.595-46 46s20.595 46 46 46 46-20.595 46-46-20.595-46-46-46zm-43.673-165.346l7.418 136c.347 6.364 5.609 11.346 11.982 11.346h48.546c6.373 0 11.635-4.982 11.982-11.346l7.418-136c.375-6.874-5.098-12.654-11.982-12.654h-63.383c-6.884 0-12.356 5.78-11.981 12.654z"/></svg>`,
+                    name: 'Error!',
                     class: 'toastlet-error',
+                    role: 'alert',
+                    ariaLive: 'assertive',
                     config: Object.freeze({
                         a11y: {
                             role: 'alert',
@@ -396,7 +408,10 @@
                     type: 'notice',
                     color: '#708090', 
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 448 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M224 0c-17.7 0-32 14.3-32 32l0 19.2C119 66 64 130.6 64 208l0 18.8c0 47-17.3 92.4-48.5 127.6l-7.4 8.3c-8.4 9.4-10.4 22.9-5.3 34.4S19.4 416 32 416l384 0c12.6 0 24-7.4 29.2-18.9s3.1-25-5.3-34.4l-7.4-8.3C401.3 319.2 384 273.9 384 226.8l0-18.8c0-77.4-55-142-128-156.8L256 32c0-17.7-14.3-32-32-32zm45.3 493.3c12-12 18.7-28.3 18.7-45.3l-64 0-64 0c0 17 6.7 33.3 18.7 45.3s28.3 18.7 45.3 18.7s33.3-6.7 45.3-18.7z"/></svg>`,
+                    name: 'Notice',
                     class: 'toastlet-notice',
+                    role: 'status',
+                    ariaLive: 'polite',
                     config: Object.freeze({
                         a11y: {
                             role: 'status',
@@ -410,7 +425,10 @@
                     type: 'loading',
                     color: '#1a6394',
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18px" height="18px" viewBox="0 0 66 66" xmlns="http://www.w3.org/2000/svg"><circle fill="none" stroke-width="10" stroke-linecap="round" stroke="#FFFFFF" cx="33" cy="33" r="28" stroke-dasharray="94 94"><animateTransform attributeName="transform" type="rotate" from="0 33 33" to="360 33 33" dur="1s" repeatCount="indefinite" /></circle></svg>`,
+                    name: 'Loading...',
                     class: 'toastlet-loading',
+                    role: 'status',
+                    ariaLive: 'polite',
                     config: Object.freeze({
                         dismissible: false,
                         sticky: true,
@@ -426,7 +444,10 @@
                     type: 'custom',
                     color: '#4A4A4A',
                     icon: `<svg class="toastlet-icon-svg toastlet-icon-type" width="18" height="18" viewBox="0 0 576 512" fill="#FFFFFF" xmlns="http://www.w3.org/2000/svg"><path d="M263.4-27L278.2 9.8 315 24.6c3 1.2 5 4.2 5 7.4s-2 6.2-5 7.4L278.2 54.2 263.4 91c-1.2 3-4.2 5-7.4 5s-6.2-2-7.4-5L233.8 54.2 197 39.4c-3-1.2-5-4.2-5-7.4s2-6.2 5-7.4L233.8 9.8 248.6-27c1.2-3 4.2-5 7.4-5s6.2 2 7.4 5zM110.7 41.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7L59.8 164.2 9.7 142.7C3.8 140.2 0 134.4 0 128s3.8-12.2 9.7-14.7L59.8 91.8 81.3 41.7C83.8 35.8 89.6 32 96 32s12.2 3.8 14.7 9.7zM464 304c6.4 0 12.2 3.8 14.7 9.7l21.5 50.1 50.1 21.5c5.9 2.5 9.7 8.3 9.7 14.7s-3.8 12.2-9.7 14.7l-50.1 21.5-21.5 50.1c-2.5 5.9-8.3 9.7-14.7 9.7s-12.2-3.8-14.7-9.7l-21.5-50.1-50.1-21.5c-5.9-2.5-9.7-8.3-9.7-14.7s3.8-12.2 9.7-14.7l50.1-21.5 21.5-50.1c2.5-5.9 8.3-9.7 14.7-9.7zM460 0c11 0 21.6 4.4 29.5 12.2l42.3 42.3C539.6 62.4 544 73 544 84s-4.4 21.6-12.2 29.5l-88.2 88.2-101.3-101.3 88.2-88.2C438.4 4.4 449 0 460 0zM44.2 398.5L308.4 134.3 409.7 235.6 145.5 499.8C137.6 507.6 127 512 116 512s-21.6-4.4-29.5-12.2L44.2 457.5C36.4 449.6 32 439 32 428s4.4-21.6 12.2-29.5z"/></svg>`,
+                    name: 'Custom',
                     class: 'toastlet-custom',
+                    role: 'status',
+                    ariaLive: 'polite',
                     config: Object.freeze({
                         a11y: {
                             role: 'status',
@@ -644,9 +665,6 @@
                             userConfig.transition[key] = value;
 
                     }
-
-                    if( ! userConfig.transition.enabled )
-                        userConfig.transition.duration = 0;
 
                 }),
 
@@ -2391,15 +2409,48 @@
                 }
 
                 let defaultConfig = {
+                    notificationType: notificationType,
+                    sticky: false,
+                    dismissible: true,
+                    stackable: false,
+                    duration: 5000,
+                    pauseButton: true,
+                    pause: {
+                        hover: true,
+                        focus: true,
+                        touch: true,
+                        inactiveTab: true
+                    },
+                    html: false,
+                    progressBar: false,
+                    progressBarDirection: 'left-to-right',
+                    icon: true,
+                    title: true,
+                    titleText: notificationType.name,
+                    customClass: '',
+                    transition: true,
+                    transitionDuration: 300,
+                    position: 'top-right',
+                    positionMobile: '',
+                    animationIn: '',
+                    animationOut: '',
+                    onClick: null,
+                    ...notificationType.config                    
+                };
+
+                window.defaultConfigProto = {
 
                     notificationType: notificationType,
+
+                    // ======================================================
+                    // Módulo 1: PROPRIEDADES DE ACESSO DIRETO (As mais comuns)
+                    // ======================================================
                     
                     sticky: false,
                     duration: 5000,
                     dismissible: true,
                     stackable: false,
-
-                    stackableGap: {
+                    stackableGap: { // Adicionado conforme nossa discussão
                         desktop: 20,
                         mobile: 10
                     },
@@ -2410,33 +2461,55 @@
                     titleText: '',
                     customClass: '',
                     
+                    // ======================================================
+                    // Módulo 2: GRUPOS ESPECÍFICOS E COESOS
+                    // ======================================================
+
+                    /**
+                     * Controla a transição CSS padrão da biblioteca (fade/slide).
+                     */
                     transition: {
                         enabled: true,
                         duration: 300
                     },
 
+                    /**
+                     * Controla as animações de entrada/saída baseadas em classes CSS customizadas.
+                     */
                     animation: {
                         in: '',
                         out: ''
                     },
 
+                    /**
+                     * Controla as condições que pausam o timer.
+                     */
                     pause: {
                         hover: true,
                         focus: true,
                         touch: true,
                         inactiveTab: true
                     },
-
+                    
+                    /**
+                     * Controla a barra de progresso do timer.
+                     */
                     progressBar: {
                         enabled: false,
                         direction: 'left-to-right'
                     },
 
+                    /**
+                     * Controla o posicionamento.
+                     */
                     position: {
                         desktop: 'top-right',
                         mobile: ''
                     },
 
+                    /**
+                     * Controla as propriedades de acessibilidade.
+                     */
                     a11y: {
                         role: '',
                         ariaLive: ''
@@ -2448,8 +2521,16 @@
 
                 };
 
+                let customConfig = { ...options }
+
+                // console.log(defaultConfig)
+
+                // console.log(customConfig)
+
                 const toastInstance = {
 
+                    notificationType: notificationType,
+                    
                     get canHover(){
                         return toastletMatchMedia.anyHover.matches;
                     },
@@ -2480,18 +2561,22 @@
                     touchStartPosition: { x: 0, y: 0 },
                     translateOutX: "0px",
                     translateOutY: "-20px",
-                    transitionRule: {
-                        toast: null
+                    animationIn: false,
+                    animationInClassList: [],
+                    animationOut: false,
+                    animationOutClassList: [],
+                    config: {
+                        ...defaultConfig,
+                        ...options
                     },
-                    animationIn: [],
-                    animationOut: [],
-                    config: toastletNotify.utils.sanitizeConfig(defaultConfig, options),
-                    clickControl: null,
+                    toastStyle: {
+                        desktop: toastletNotify.styles.toast['desktop'] + `background-color: ${notificationType.color};`,
+                        mobile: toastletNotify.styles.toast['mobile'] + `background-color: ${notificationType.color};`
+                    },
                     classList: {
                         desktop: ['toastlet', 'toastlet-desktop'],
                         mobile: ['toastlet', 'toastlet-mobile']
                     },
-                    // ?? TALVEZ DÊ PARA USAR MAIS ESSA PROPRIEDADE
                     defaultDimensions: {
                         desktop: {
                             width: 'auto',
@@ -2531,9 +2616,141 @@
                     handles: {}
                 };
 
-                toastInstance.classList.desktop.push(toastInstance.config.position.data.desktop.class, notificationType.class);
+/*                 if( typeof toastInstance.config.sticky !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'sticky' must be a boolean\n  Received: ${typeof toastInstance.config.sticky}\n  Using default value: false`);
+                    toastInstance.config.sticky = false;
+                }
+
+                if( typeof toastInstance.config.dismissible !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'dismissible' must be a boolean\n  Received: ${typeof toastInstance.config.dismissible}\n  Using default value: true`);
+                    toastInstance.config.dismissible = true;
+                }
+
+                if( typeof toastInstance.config.stackable !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'stackable' must be a boolean\n  Received: ${typeof toastInstance.config.stackable}\n  Using default value: false`);
+                    toastInstance.config.stackable = false;
+                }
+
+                if( typeof toastInstance.config.duration !== 'number' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'delay' must be a number\n  Received: ${typeof toastInstance.config.duration}\n  Using default value: 5000`);
+                    toastInstance.config.duration = 5000;
+                }
+
+                if( toastInstance.config.duration < 0 ){
+                    console.warn(`[ToastletNotify] Warning: Option 'delay' must be a non-negative number\n  Received: ${toastInstance.config.duration}\n  Setting to 0 (notification will remain until dismissed, equivalent to sticky: true)`);
+                    toastInstance.config.duration = 0;
+                }
+
+                if( typeof toastInstance.config.pauseButton !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'pauseButton' must be a boolean\n  Received: ${typeof toastInstance.config.pauseButton}\n  Using default value: true`);
+                    toastInstance.config.pauseButton = true;
+                }
+
+                if( typeof toastInstance.config.progressBar !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'progressBar' must be a boolean\n  Received: ${typeof toastInstance.config.progressBar}\n  Using default value: false`);
+                    toastInstance.config.progressBar = false;
+                }
+
+                if( typeof toastInstance.config.progressBarDirection !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'progressBarDirection' must be a string\n  Received: ${typeof toastInstance.config.progressBarDirection}\n  Using default value: "left-to-right"`);
+                    toastInstance.config.progressBarDirection = 'left-to-right';
+                }
+
+                toastInstance.progressBarConfig = toastletNotify.progressBarMap.get(toastInstance.config.progressBarDirection);
+
+                if( ! toastInstance.progressBarConfig ) {
+                    console.warn(`[ToastletNotify] Warning: Invalid progressBarDirection "${toastInstance.config.progressBarDirection}"\n  Valid directions: ${toastletNotify.progressBarMap.array.join(' ')}\n  Using default value: "left-to-right"`);
+                    toastInstance.progressBarConfig = toastletNotify.progressBarMap.get('left-to-right');
+                }
+
+                if( typeof toastInstance.config.icon !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'icon' must be a boolean\n  Received: ${typeof toastInstance.config.icon}\n  Using default value: true`);
+                    toastInstance.config.icon = true;
+                }
+
+                if( typeof toastInstance.config.title !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'title' must be a boolean\n  Received: ${typeof toastInstance.config.title}\n  Using default value: true`);
+                    toastInstance.config.title = true;
+                }
+
+                if( typeof toastInstance.config.titleText !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'titleText' must be a string\n  Received: ${typeof toastInstance.config.titleText}\n  Using default value: "${notificationType.name}"`);
+                    toastInstance.config.titleText = notificationType.name;
+                }
+
+                if( typeof toastInstance.config.customClass !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'customClass' must be a string\n  Received: ${typeof toastInstance.config.customClass}\n  Using default value: ""`);
+                    toastInstance.config.customClass = "";
+                }
+
+                if( typeof toastInstance.config.transition !== 'boolean' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'transition' must be a boolean\n  Received: ${typeof toastInstance.config.transition}\n  Using default value: true`);
+                    toastInstance.config.transition = true;
+                }
+
+                if( typeof toastInstance.config.transitionDuration !== 'number' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'transitionDuration' must be a number\n  Received: ${typeof toastInstance.config.transitionDuration}\n  Using default value: 300`);
+                    toastInstance.config.transitionDuration = 300;
+                }
+
+                if( toastInstance.config.transitionDuration < 0 ){
+                    console.warn(`[ToastletNotify] Warning: Option 'transitionDuration' must be a non-negative number\n  Received: ${toastInstance.config.transitionDuration}\n  Setting to 0 (animations will be instant with no transition effect)`);
+                    toastInstance.config.transitionDuration = 0;
+                }
+
+                if( typeof toastInstance.config.position !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'position' must be a string\n  Received: ${typeof toastInstance.config.position}\n  Using default value: "top-right"`);
+                    toastInstance.config.position = 'top-right';
+                }
+
+                if( typeof toastInstance.config.animationIn !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'animationIn' must be a string\n  Received: ${typeof toastInstance.config.animationIn}\n  Using default value: ""`);
+                    toastInstance.config.animationIn = '';
+                }
+
+                if( typeof toastInstance.config.animationOut !== 'string' ){
+                    console.warn(`[ToastletNotify] Warning: Option 'animationOut' must be a string\n  Received: ${typeof toastInstance.config.animationOut}\n  Using default value: ""`);
+                    toastInstance.config.animationOut = '';
+                }
+
+                if( typeof toastInstance.config.onClick !== 'function' && toastInstance.config.onClick !== null ){
+                    console.warn(`[ToastletNotify] Warning: Option 'onClick' must be a function or null\n  Received: ${typeof toastInstance.config.onClick}\n  Using default value: null`);
+                    toastInstance.config.onClick = null;
+                }
+ */
+
+                let desktopPosition = toastletNotify.getPosition.desktop(toastInstance.config.position);
+
+                if( ! desktopPosition ) {
+                    console.warn(`[ToastletNotify] Warning: Invalid desktop position "${toastInstance.config.position}"\n  Valid positions: ${toastletNotify.getPosition.available.array.desktop.join(', ')}\n  Using default position: "top-right"`);
+                    desktopPosition = toastletNotify.getPosition.desktop('top-right');
+                }
                 
-                toastInstance.classList.mobile.push(toastInstance.config.position.data.mobile.class, notificationType.class);
+                toastInstance.config.position = desktopPosition.name;
+
+                if(toastInstance.config.positionMobile.trim().length === 0)
+                    toastInstance.config.positionMobile = desktopPosition.mobile;
+
+                let mobilePosition = toastletNotify.getPosition.mobile(toastInstance.config.positionMobile);
+
+                if( ! mobilePosition ){
+                    console.warn(`[ToastletNotify] Warning: Invalid mobile position "${toastInstance.config.positionMobile}"\n  Valid positions: ${toastletNotify.getPosition.available.array.mobile.join(', ')}\n  Using default position: "${desktopPosition.mobile}"`);
+                    mobilePosition = toastletNotify.getPosition.mobile(desktopPosition.mobile);
+                }
+
+                toastInstance.config.positionMobile = mobilePosition.name;
+
+                toastInstance.classList.desktop.push(desktopPosition.class, notificationType.class);
+                
+                toastInstance.classList.mobile.push(mobilePosition.class, notificationType.class);
+
+                // TODO: FAZER ISSO AQUI LOGO NA CRIAÇÃO DO OBJETO
+
+                if(toastInstance.config.transitionDuration === 0 && toastInstance.config.transition) 
+                    toastInstance.config.transition = false;
+
+                if(!toastInstance.config.transition && toastInstance.config.transitionDuration !== 0) 
+                    toastInstance.config.transitionDuration = 0;
 
                 toastInstance.isSticky = toastInstance.config.sticky || toastInstance.config.duration <= 0;
 
@@ -2541,13 +2758,64 @@
 
                 toastInstance.isDismissible = toastInstance.config.dismissible;
 
-                toastInstance.classList.desktop = toastletHelpers.mergeClasses(toastInstance.classList.desktop, toastletHelpers.explodeClasses(toastInstance.config.customClass));
+                // TODO: AQUI CABE OTIMIZAÇÃO DE CÓDIGO PARA EVITAR REPETIR ESSES LOOPS
 
-                toastInstance.classList.mobile = toastletHelpers.mergeClasses(toastInstance.classList.mobile, toastletHelpers.explodeClasses(toastInstance.config.customClass));
+                // Normalize customClass removing extra spaces, normalizing whitespace and trimming
+                toastInstance.config.customClass = toastInstance.config.customClass.replace(/[\s\p{Z}]+/gu, ' ').trim();
+                
+                const classList = toastInstance.config.customClass.split(' ');
 
-                toastInstance.animationIn = toastletHelpers.explodeClasses(toastInstance.config.animation.in);
+                for(let i = 0, len = classList.length; i < len; i++) {
 
-                toastInstance.animationOut = toastletHelpers.explodeClasses(toastInstance.config.animation.out);
+                    const cls = classList[i].replace(/[\s\p{Z}]+/gu, '');
+
+                    if(cls.length === 0) continue;
+
+                    if( ! toastInstance.classList.desktop.includes(cls) )
+                        toastInstance.classList.desktop.push(cls);
+
+                    if( ! toastInstance.classList.mobile.includes(cls) )
+                        toastInstance.classList.mobile.push(cls);
+
+                }
+
+                // Normalize animationIn removing extra spaces, normalizing whitespace and trimming
+                toastInstance.config.animationIn = toastInstance.config.animationIn.replace(/[\s\p{Z}]+/gu, ' ').trim();
+
+                const animationInClassList = toastInstance.config.animationIn.split(' ');
+
+                for(let i = 0, len = animationInClassList.length; i < len; i++) {
+
+                    const cls = animationInClassList[i].replace(/[\s\p{Z}]+/gu, '');
+
+                    if(cls.length === 0) continue;
+
+                    if( ! toastInstance.animationInClassList.includes(cls) )
+                        toastInstance.animationInClassList.push(cls);
+
+                }
+
+                if( toastInstance.animationInClassList.length > 0 )
+                    toastInstance.animationIn = true;
+
+                // Normalize animationOut removing extra spaces, normalizing whitespace and trimming
+                toastInstance.config.animationOut = toastInstance.config.animationOut.replace(/[\s\p{Z}]+/gu, ' ').trim();
+
+                const animationOutClassList = toastInstance.config.animationOut.split(' ');
+
+                for(let i = 0, len = animationOutClassList.length; i < len; i++) {
+
+                    const cls = animationOutClassList[i].replace(/[\s\p{Z}]+/gu, '');
+
+                    if(cls.length === 0) continue;
+
+                    if( ! toastInstance.animationOutClassList.includes(cls) )
+                        toastInstance.animationOutClassList.push(cls);
+
+                }
+
+                if( toastInstance.animationOutClassList.length > 0 )
+                    toastInstance.animationOut = true;
 
                 if( ! toastInstance.config.icon && ! toastInstance.config.title && content.length === 0 ) {
                     const err = new Error();
@@ -2556,10 +2824,11 @@
                     return null;
                 }
 
-                toastInstance.transitionRule.toast = ['all', `${toastInstance.config.transition.duration}ms`, 'ease-in-out'];
-
-                if( toastInstance.config.progressBar )
-                    toastInstance.transitionRule.progressBar = ['all', `${toastInstance.config.duration}ms`, 'linear'];
+                // TODO: JÁ DEIXAR ESSE OBJETO AQUI DECLARADO
+                toastInstance.transitionRule = {
+                    toast: ['all', `${toastInstance.config.transitionDuration}ms`, 'ease-in-out'],
+                    progressBar: ['all', `${toastInstance.config.duration}ms`, 'linear']
+                };
 
                 if( toastInstance.config.onClick !== null ) {
 
@@ -2878,17 +3147,15 @@
 
                 const cursor = ( toastInstance.config.onClick !== null ) ? 'cursor: pointer;' : 'cursor: auto;';
 
-                // TODO: LEMBRAR DE OTIMIZAR ISSO AQUI
-
                 if( toastletNotify.utils.isMobile(toastInstance) ) {
 
-                    toastInstance.toast.style.cssText = toastletNotify.styles.toast['mobile'] + `background-color: ${notificationType.color};` + gridTemplateColumns + gridGap + cursor;
+                    toastInstance.toast.style.cssText = toastInstance.toastStyle.mobile + gridTemplateColumns + gridGap + cursor;
                     toastletNotify.setPosition.mobile[toastInstance.config.positionMobile](toastInstance);
 
                 }
                 else {
 
-                    toastInstance.toast.style.cssText = toastletNotify.styles.toast['desktop'] + `background-color: ${notificationType.color};` + gridTemplateColumns + gridGap + cursor;
+                    toastInstance.toast.style.cssText = toastInstance.toastStyle.desktop + gridTemplateColumns + gridGap + cursor;
                     toastletNotify.setPosition.desktop[toastInstance.config.position](toastInstance);
 
                 }

@@ -1,0 +1,21 @@
+{
+  "name": "toastlet-notify",
+  "version": "1.0.0",
+  "description": "[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/pedrohrigolin/toastlet-notify) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/pedrohrigolin/toastlet-notify/releases)",
+  "main": "toastletNotify.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/pedrohrigolin/toastlet-notify"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/pedrohrigolin/toastlet-notify/issues"
+  },
+  "homepage": "https://github.com/pedrohrigolin/toastlet-notify#readme"
+}

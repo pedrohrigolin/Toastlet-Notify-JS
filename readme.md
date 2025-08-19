@@ -1,6 +1,6 @@
 # 🍞 Toastlet Notify
 
-[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/pedrohrigolin/Toastlet-Notify-JS) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Version](https://img.shields.io/badge/Version-1.0.0-green.svg)](https://github.com/pedrohrigolin/Toastlet-Notify-JS/releases)
+[![GitHub](https://img.shields.io/badge/GitHub-Repository-blue.svg)](https://github.com/pedrohrigolin/Toastlet-Notify-JS) [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT) [![Version](https://img.shields.io/badge/Version-1.1.0-green.svg)](https://github.com/pedrohrigolin/Toastlet-Notify-JS/releases)
 
 **Ultra-lightweight, zero-dependency JavaScript toast notification library**
 
@@ -97,6 +97,8 @@ toastletNotify.notify('error', 'Error processing request.');
 | `customClass` | `string` | `""` | Additional CSS classes for customization |
 | `transition` | `boolean` | `true` | Enable/disable transition animations |
 | `transitionDuration` | `number` | `300` | Duration of animations in milliseconds. Use `0` for same effect as `transition: false` |
+| `position` | `string` | `"top-right"` | Desktop position: `"top"`, `"top-right"`, `"top-left"`, `"bottom"`, `"bottom-right"`, `"bottom-left"` |
+| `positionMobile` | `string` | Auto-selected | Mobile position: `"top"`, `"bottom"` (overrides automatic selection) |
 
 ### 🧲 Sticky Notification
 
@@ -141,6 +143,72 @@ toastletNotify.notify('warning', 'Also no transitions!', {
     transitionDuration: 0  // Functionally equivalent to transition: false
 });
 ```
+
+---
+
+## 📍 Positioning
+
+Control where notifications appear on desktop and mobile devices with flexible positioning options.
+
+### 🖥️ Desktop Positions
+
+| Position | Description | Visual Location | CSS Coordinates |
+|----------|-------------|-----------------|-----------------|
+| `top` | Top right corner (default) | Upper right | `top: 20px, right: 20px, left: auto, bottom: auto` |
+| `top-right` | Top right corner | Upper right | `top: 20px, right: 20px, left: auto, bottom: auto` |
+| `top-left` | Top left corner | Upper left | `top: 20px, right: auto, left: 20px, bottom: auto` |
+| `bottom` | Bottom right corner | Lower right | `top: auto, right: 20px, left: auto, bottom: 20px` |
+| `bottom-right` | Bottom right corner | Lower right | `top: auto, right: 20px, left: auto, bottom: 20px` |
+| `bottom-left` | Bottom left corner | Lower left | `top: auto, right: auto, left: 20px, bottom: 20px` |
+
+### 📱 Mobile Positions
+
+| Position | Description | Visual Location | CSS Coordinates |
+|----------|-------------|-----------------|-----------------|
+| `top` | Top of screen (default) | Full width at top | `top: 0, right: 0, left: 0, bottom: auto` |
+| `bottom` | Bottom of screen | Full width at bottom | `top: auto, right: 0, left: 0, bottom: 0` |
+
+### 🎯 Usage Examples
+
+#### Basic Desktop Positioning
+```javascript
+// Top left corner
+toastletNotify.notify('success', 'Saved!', {
+    position: 'top-left'
+});
+
+// Bottom right corner  
+toastletNotify.notify('info', 'Update available', {
+    position: 'bottom'
+});
+```
+
+#### Desktop + Mobile Positioning
+```javascript
+// Desktop: top-left, Mobile: bottom
+toastletNotify.notify('warning', 'Check your connection', {
+    position: 'top-left',
+    positionMobile: 'bottom'
+});
+```
+
+#### Mobile-only Positioning
+```javascript
+// Uses default desktop position, custom mobile
+toastletNotify.notify('error', 'Network error', {
+    positionMobile: 'bottom'
+});
+```
+
+### 🧠 Smart Position Logic
+
+- **Desktop only**: Automatically selects appropriate mobile position
+  - Top positions (`top`, `top-right`, `top-left`) → Mobile: `top`
+  - Bottom positions (`bottom`, `bottom-right`, `bottom-left`) → Mobile: `bottom`
+- **Both specified**: Uses exact positions for each device
+- **Mobile only**: Uses custom mobile position with default desktop
+- **Neither specified**: Uses library defaults
+
 ---
 
 ## 🧠 Smart Behavior and UX
@@ -350,6 +418,29 @@ toastletNotify.notify('info', 'Quick info message.', {
     delay: 2000,
     transition: true,
     transitionDuration: 150
+});
+```
+
+### 📍 Positioning Examples
+
+```javascript
+// Bottom-left desktop notifications for less intrusive feedback
+toastletNotify.notify('success', 'Settings saved!', {
+    position: 'bottom-left',
+    delay: 3000
+});
+
+// Top-left for important warnings with mobile bottom positioning
+toastletNotify.notify('warning', 'Session will expire in 5 minutes', {
+    position: 'top-left',
+    positionMobile: 'bottom',
+    sticky: true
+});
+
+// Mobile-only bottom positioning for touch-friendly interactions
+toastletNotify.notify('info', 'Swipe left to delete items', {
+    positionMobile: 'bottom',
+    delay: 4000
 });
 ```
 
